@@ -35,14 +35,6 @@ public class BalloonSpawner : MonoBehaviour
 
     }
 
-    // Generates a random spawn position in 2D space
-    Vector3 RandomSpawnPosition()
-    {
-        float x = Random.Range(-6f, 6f);
-        float y = Random.Range(-3f, 3f);
-        return new Vector3(x, y, 0f);
-    }
-
     // Fisher–Yates Shuffle to randomize the list
     void Shuffle(List<int> list)
     {
