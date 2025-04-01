@@ -4,38 +4,45 @@ using System.Collections.Generic;
 
 public class BalloonSpawner : MonoBehaviour
 {
-    public GameObject balloonPrefab;     // Your balloon prefab with TMP text
-    public Transform spawnParent;        // Optional: empty GameObject to group balloons
-    public int numberOfBalloons = 10;    // Should stay 10 for 0-9
-    public float spacing = 1.5f;     // Distance between balloons
-    public float yPosition = 0f;     // Height where balloons appear
-
+    public GameObject balloonPrefab;         // Balloon prefab (must have TextMeshPro as child)
+    public Transform spawnParent;            // Optional parent object
+    public int numberOfBalloons = 10;        // Number of balloons
+    public float spacing = 1.5f;             // Distance between them
+    public float yPosition = 0f;             // Height where they appear
+    public BubbleSortController sortController; // Bubble sort logic controller
 
     void Start()
     {
-        float offset = (numberOfBalloons - 1) * spacing / 2f; // Center the line
-
-        // Step 1: Create a list of numbers from 0 to 9
+        float offset = (numberOfBalloons - 1) * spacing / 2f; // Center the row
         List<int> numbers = new List<int>();
-        for (int i = 0; i < 10; i++) numbers.Add(i);
 
-        // Step 2: Shuffle the list to randomize order
+        for (int i = 0; i < numberOfBalloons; i++) numbers.Add(i);
         Shuffle(numbers);
 
-        // Step 3: Instantiate balloons and assign numbers
+        List<GameObject> spawnedBalloons = new List<GameObject>();
+
         for (int i = 0; i < numberOfBalloons; i++)
         {
             Vector3 spawnPos = new Vector3(i * spacing - offset, yPosition, 0f);
             GameObject balloon = Instantiate(balloonPrefab, spawnPos, Quaternion.identity, spawnParent);
-            
-            TextMeshProUGUI tmp = balloon.GetComponentInChildren<TextMeshProUGUI>();
-            if (tmp != null)
-                tmp.text = numbers[i].ToString();
+
+            // ✅ Use TextMeshPro (world space)
+            TextMeshPro numberText = balloon.GetComponentInChildren<TextMeshPro>();
+            if (numberText != null)
+                numberText.text = numbers[i].ToString();
+
+            spawnedBalloons.Add(balloon);
         }
 
+        // Send to controller
+        if (sortController != null)
+        {
+            sortController.balloons = spawnedBalloons;
+            sortController.Initialize();
+        }
     }
 
-    // Fisher–Yates Shuffle to randomize the list
+    // Fisher–Yates Shuffle
     void Shuffle(List<int> list)
     {
         for (int i = list.Count - 1; i > 0; i--)
