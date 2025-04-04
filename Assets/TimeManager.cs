@@ -31,10 +31,18 @@ public class TimerManager : MonoBehaviour
         isRunning = true;
     }
 
-    // Call this method to stop the timer
+    // Call this method to stop the timer and reset it
     public void StopTimer()
     {
         isRunning = false;
+        ResetTimer();
+    }
+
+    // Reset the timer to zero and update the UI
+    public void ResetTimer()
+    {
+        timer = 0f;
+        UpdateTimerUI();
     }
 
     void Update()
@@ -46,13 +54,14 @@ public class TimerManager : MonoBehaviour
         }
     }
 
-    // Updates the timer UI, if assigned
+    // Updates the timer UI in "MM:SS" format
     void UpdateTimerUI()
     {
         if (timerText != null)
         {
-            // Format the timer to display seconds with two decimals.
-            timerText.text = timer.ToString("F2") + " seconds";
+            int minutes = Mathf.FloorToInt(timer / 60f);
+            int seconds = Mathf.FloorToInt(timer % 60f);
+            timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
         }
     }
 
