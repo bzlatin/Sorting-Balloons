@@ -14,6 +14,6 @@
 5. Gameplay Video
    1. (Coming Soon)
 6. Education Game Design Document
-   1. Link to the document in your repo
+   1. https://docs.google.com/document/d/1O8EQdS_Fc7XfgZvpDotb9tJoFIuBJpD18HIOmcBMi3Y/edit?usp=sharing
 7. Credits and Acknowledgements
    1. List any resources with links to sources, author attribution, and brief acknowledgment of how the resource was used (including Gen AI for writing, etc.)
