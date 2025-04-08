@@ -7,8 +7,10 @@ public class BubbleSortController : MonoBehaviour
 {
     public List<GameObject> balloons;
     public TextMeshProUGUI statusText;
+    public UIManager uiManager;
 
     private int index = 0;
+    
     private int end;
     private bool swapped = false;
     private bool isSwapping = false;
@@ -69,7 +71,7 @@ public class BubbleSortController : MonoBehaviour
 
             Swap(index, index + 1);
             swapped = true;
-            statusText.text = $"✅ Swapped {a} and {b}";
+            statusText.text = $"Swapped {a} and {b}";
         }
         else
         {
@@ -80,7 +82,7 @@ public class BubbleSortController : MonoBehaviour
                 return;
             }
 
-            statusText.text = $"✔️ Correctly skipped {a} and {b}";
+            statusText.text = $"Correctly skipped {a} and {b}";
         }
 
         index++;
@@ -137,6 +139,13 @@ public class BubbleSortController : MonoBehaviour
             statusText.text = "Sorted!";
             HighlightAsWinners();
             DisableInput(); // Optional: disable if sorting complete
+
+            if (uiManager != null) {
+                uiManager.ShowWinScreen(); 
+            } else {
+                Debug.LogWarning("uiManager reference is null!");
+            }
+                   
         }
 
         isSwapping = false;

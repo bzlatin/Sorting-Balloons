@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class BalloonSpawner : MonoBehaviour
 {
     public GameObject balloonPrefab;         // Balloon prefab (must have TextMeshPro as child)
-    public Transform spawnParent;            // Optional parent object
     public int numberOfBalloons = 10;        // Number of balloons
     public float spacing = 1.5f;             // Distance between them
     public float yPosition = 0f;             // Height where they appear
@@ -24,7 +23,7 @@ public class BalloonSpawner : MonoBehaviour
         for (int i = 0; i < numberOfBalloons; i++)
         {
             Vector3 spawnPos = new Vector3(i * spacing - offset, yPosition, 0f);
-            GameObject balloon = Instantiate(balloonPrefab, spawnPos, Quaternion.identity, spawnParent);
+            GameObject balloon = Instantiate(balloonPrefab, spawnPos, Quaternion.identity);
 
             // ✅ Use TextMeshPro (world space)
             TextMeshPro numberText = balloon.GetComponentInChildren<TextMeshPro>();
