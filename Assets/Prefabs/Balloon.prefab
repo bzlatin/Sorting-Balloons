@@ -284,12 +284,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 8130654632775677324}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d91e738293ae64b2aacab72c71c41675, type: 3}
+  m_Script: {fileID: 11500000, guid: f4b18893dc062454dbb47efd16dc707b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   normalSprite: {fileID: 21300000, guid: e131d3f5ff927e6479ae65d64b422d0e, type: 3}
   highlightSprite: {fileID: 21300000, guid: edc40e47dfae4774585fcb2a5c85136a, type: 3}
-  dimmedSprite: {fileID: 21300000, guid: ca3357bf98100cf4c88c0dfd6e9c2ee4, type: 3}
+  winnerSprite: {fileID: 21300000, guid: ca3357bf98100cf4c88c0dfd6e9c2ee4, type: 3}
 --- !u!212 &1778725825537661745
 SpriteRenderer:
   m_ObjectHideFlags: 0

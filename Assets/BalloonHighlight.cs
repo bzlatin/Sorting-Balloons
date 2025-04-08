@@ -6,7 +6,8 @@ public class BalloonHighlight : MonoBehaviour
 
     public Sprite normalSprite;
     public Sprite highlightSprite;
-    public Sprite dimmedSprite;
+    public Sprite winnerSprite;
+
 
     void Awake()
     {
@@ -15,7 +16,7 @@ public class BalloonHighlight : MonoBehaviour
             sr = GetComponentInChildren<SpriteRenderer>();
 
         if (sr == null)
-            Debug.LogError("❌ SpriteRenderer missing from balloon or children.");
+            Debug.LogError("SpriteRenderer missing from balloon or children.");
     }
 
     public void SetNormal()
@@ -30,9 +31,11 @@ public class BalloonHighlight : MonoBehaviour
             sr.sprite = highlightSprite;
     }
 
-    public void SetDimmed()
+    public void SetWinner() 
     {
-        if (sr != null && dimmedSprite != null)
-            sr.sprite = dimmedSprite;
+        if (sr != null && winnerSprite != null)
+            sr.sprite = winnerSprite;        
     }
+
+   
 }

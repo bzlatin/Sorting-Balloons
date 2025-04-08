@@ -12,25 +12,27 @@ public class BubbleSortController : MonoBehaviour
     private int end;
     private bool swapped = false;
     private bool isSwapping = false;
+    private bool isActive = true; // 🔒 Controls if input is allowed
 
     public void Initialize()
     {
         if (balloons == null || balloons.Count < 2)
         {
-            Debug.LogError("❌ Balloon list not assigned or too short.");
+            Debug.LogError("Balloon list not assigned or too short.");
             return;
         }
 
         index = 0;
         swapped = false;
         end = balloons.Count;
+        isActive = true; // ✅ Reset on init
 
         UpdateHighlight();
     }
 
     void Update()
     {
-        if (balloons == null || index + 1 >= end || isSwapping) return;
+        if (!isActive || balloons == null || index + 1 >= end || isSwapping) return;
 
         if (Input.GetKeyDown(KeyCode.LeftArrow)) HandleAction(true);
         else if (Input.GetKeyDown(KeyCode.RightArrow)) HandleAction(false);
@@ -49,7 +51,7 @@ public class BubbleSortController : MonoBehaviour
 
         if (leftTMP == null || rightTMP == null)
         {
-            Debug.LogError("❌ One or both balloons are missing a TextMeshPro component.");
+            Debug.LogError("One or both balloons are missing a TextMeshPro component.");
             return;
         }
 
@@ -60,7 +62,8 @@ public class BubbleSortController : MonoBehaviour
         {
             if (!attemptSwap)
             {
-                statusText.text = "❌ You should have swapped!";
+                statusText.text = "You should have swapped!";
+                LifeSystem.Instance.LoseLife();
                 return;
             }
 
@@ -72,7 +75,8 @@ public class BubbleSortController : MonoBehaviour
         {
             if (attemptSwap)
             {
-                statusText.text = "❌ You shouldn't have swapped!";
+                statusText.text = "You shouldn't have swapped!";
+                LifeSystem.Instance.LoseLife();
                 return;
             }
 
@@ -130,11 +134,26 @@ public class BubbleSortController : MonoBehaviour
 
         if (IsSorted())
         {
-            statusText.text = "🎉 Sorted!";
-            DimAllBalloons();
+            statusText.text = "Sorted!";
+            HighlightAsWinners();
+            DisableInput(); // Optional: disable if sorting complete
         }
 
         isSwapping = false;
+    }
+    void HighlightAsWinners()
+    {
+        foreach (var b in balloons)
+        {
+            var highlight = b.GetComponent<BalloonHighlight>();
+            highlight?.SetWinner();
+        }
+    }
+
+
+    public void DisableInput()
+    {
+        isActive = false;
     }
 
     void UpdateHighlight()
@@ -151,15 +170,6 @@ public class BubbleSortController : MonoBehaviour
                 highlight.SetHighlighted();
             else
                 highlight.SetNormal();
-        }
-    }
-
-    void DimAllBalloons()
-    {
-        foreach (var b in balloons)
-        {
-            var highlight = b.GetComponent<BalloonHighlight>();
-            highlight?.SetDimmed();
         }
     }
 
