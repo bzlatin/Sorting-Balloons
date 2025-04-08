@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/LevelSelector.unity
     guid: 219b067c557fc3a409ba3860b24e6ab9
   - enabled: 1
-    path: Assets/Scenes/Balloon Sort Naz.unity
+    path: Assets/Scenes/MainMenu.unity
     guid: b59955962e063e845a4b2f052218f55c
   - enabled: 1
     path: Assets/Scenes/InGame.unity
