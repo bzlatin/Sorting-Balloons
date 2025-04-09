@@ -7,30 +7,34 @@ public class BubbleSortController : MonoBehaviour
 {
     public List<GameObject> balloons;
     public TextMeshProUGUI statusText;
+    public UIManager uiManager;
 
     private int index = 0;
+    
     private int end;
     private bool swapped = false;
     private bool isSwapping = false;
+    private bool isActive = true; // 🔒 Controls if input is allowed
 
     public void Initialize()
     {
         if (balloons == null || balloons.Count < 2)
         {
-            Debug.LogError("❌ Balloon list not assigned or too short.");
+            Debug.LogError("Balloon list not assigned or too short.");
             return;
         }
 
         index = 0;
         swapped = false;
         end = balloons.Count;
+        isActive = true; // ✅ Reset on init
 
         UpdateHighlight();
     }
 
     void Update()
     {
-        if (balloons == null || index + 1 >= end || isSwapping) return;
+        if (!isActive || balloons == null || index + 1 >= end || isSwapping) return;
 
         if (Input.GetKeyDown(KeyCode.LeftArrow)) HandleAction(true);
         else if (Input.GetKeyDown(KeyCode.RightArrow)) HandleAction(false);
@@ -49,7 +53,7 @@ public class BubbleSortController : MonoBehaviour
 
         if (leftTMP == null || rightTMP == null)
         {
-            Debug.LogError("❌ One or both balloons are missing a TextMeshPro component.");
+            Debug.LogError("One or both balloons are missing a TextMeshPro component.");
             return;
         }
 
@@ -60,23 +64,25 @@ public class BubbleSortController : MonoBehaviour
         {
             if (!attemptSwap)
             {
-                statusText.text = "❌ You should have swapped!";
+                statusText.text = "You should have swapped!";
+                LifeSystem.Instance.LoseLife();
                 return;
             }
 
             Swap(index, index + 1);
             swapped = true;
-            statusText.text = $"✅ Swapped {a} and {b}";
+            statusText.text = $"Swapped {a} and {b}";
         }
         else
         {
             if (attemptSwap)
             {
-                statusText.text = "❌ You shouldn't have swapped!";
+                statusText.text = "You shouldn't have swapped!";
+                LifeSystem.Instance.LoseLife();
                 return;
             }
 
-            statusText.text = $"✔️ Correctly skipped {a} and {b}";
+            statusText.text = $"Correctly skipped {a} and {b}";
         }
 
         index++;
@@ -130,11 +136,33 @@ public class BubbleSortController : MonoBehaviour
 
         if (IsSorted())
         {
-            statusText.text = "🎉 Sorted!";
-            DimAllBalloons();
+            statusText.text = "Sorted!";
+            HighlightAsWinners();
+            DisableInput(); // Optional: disable if sorting complete
+
+            if (uiManager != null) {
+                uiManager.ShowWinScreen(); 
+            } else {
+                Debug.LogWarning("uiManager reference is null!");
+            }
+                   
         }
 
         isSwapping = false;
+    }
+    void HighlightAsWinners()
+    {
+        foreach (var b in balloons)
+        {
+            var highlight = b.GetComponent<BalloonHighlight>();
+            highlight?.SetWinner();
+        }
+    }
+
+
+    public void DisableInput()
+    {
+        isActive = false;
     }
 
     void UpdateHighlight()
@@ -151,15 +179,6 @@ public class BubbleSortController : MonoBehaviour
                 highlight.SetHighlighted();
             else
                 highlight.SetNormal();
-        }
-    }
-
-    void DimAllBalloons()
-    {
-        foreach (var b in balloons)
-        {
-            var highlight = b.GetComponent<BalloonHighlight>();
-            highlight?.SetDimmed();
         }
     }
 

@@ -223,7 +223,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_TargetDisplay: 0
 --- !u!1 &234061256
 GameObject:
@@ -433,6 +433,7 @@ GameObject:
   - component: {fileID: 486564491}
   - component: {fileID: 486564490}
   - component: {fileID: 486564489}
+  - component: {fileID: 486564493}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -558,6 +559,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &486564493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 486564488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b81dc773ea9c50243bb62b222bc254af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &496728064
 GameObject:
   m_ObjectHideFlags: 0
@@ -690,7 +703,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: QuickSort
+  m_text: Bubble Sort
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -717,8 +730,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 80
-  m_fontSizeBase: 80
+  m_fontSize: 76.03
+  m_fontSizeBase: 76.03
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -844,6 +857,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 486564493}
+        m_TargetAssemblyTypeName: LevelSelectorScript, Assembly-CSharp
+        m_MethodName: OnBubbleSortButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1063814118
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -944,7 +969,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1360538634}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec570c8d14690d24281e16b7f709c67d, type: 3}
+  m_Script: {fileID: 11500000, guid: 87bd30bd462034681968ef2679f66530, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   leftPanel: {fileID: 496728064}
@@ -961,7 +986,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1360538634}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f9f7ac42b7fa8947b50762137cd0056, type: 3}
+  m_Script: {fileID: 11500000, guid: 84a235a3c0a884b9b852bd30e04caa08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   timerText: {fileID: 1891491078}
