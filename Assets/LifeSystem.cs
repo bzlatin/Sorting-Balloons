@@ -1,0 +1,84 @@
+using UnityEngine;
+using TMPro;
+using UnityEngine.SceneManagement;
+
+public class LifeSystem : MonoBehaviour
+{
+    public static LifeSystem Instance { get; private set; }
+
+    public int maxLives = 5;
+    private int currentLives;
+    public BubbleSortController sortController;
+
+    public TextMeshProUGUI livesText;
+    public TextMeshProUGUI statusText;
+    public GameObject gameOverPanel;
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+    }
+
+    void Start()
+    {
+        ResetLives();
+    }
+
+    public void LoseLife()
+    {
+        currentLives--;
+        UpdateLivesUI();
+
+        if (currentLives <= 0)
+        {
+            GameOver();
+        }
+    }
+
+    public void ResetLives()
+    {
+        currentLives = maxLives;
+        UpdateLivesUI();
+
+        if (gameOverPanel != null)
+            gameOverPanel.SetActive(false);
+    }
+
+    void UpdateLivesUI()
+    {
+        if (livesText != null)
+        {
+            livesText.text = "Lives: " + currentLives;
+        }
+    }
+
+    void GameOver()
+    {
+        if (statusText != null)
+            statusText.text = "Game Over!";
+
+        if (gameOverPanel != null)
+            gameOverPanel.SetActive(true);
+        
+        if (sortController != null)
+        sortController.DisableInput(); // 👈 this disables the arrows
+    }
+
+    public void RestartLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void LoadMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+}
