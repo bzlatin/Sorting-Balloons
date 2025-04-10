@@ -9,6 +9,8 @@ public class BalloonSpawner : MonoBehaviour
     public float spacing = 1.5f;             // Distance between them
     public float yPosition = 0f;             // Height where they appear
     public BubbleSortController sortController; // Bubble sort logic controller
+    public Canvas balloonsCanvas;  // Reference to the BalloonsCanvas
+
 
     void Start()
     {
@@ -25,7 +27,10 @@ public class BalloonSpawner : MonoBehaviour
             Vector3 spawnPos = new Vector3(i * spacing - offset, yPosition, 0f);
             GameObject balloon = Instantiate(balloonPrefab, spawnPos, Quaternion.identity);
 
-            // ✅ Use TextMeshPro (world space)
+            // Set the balloon to be a child of the BalloonsCanvas
+            balloon.transform.SetParent(balloonsCanvas.transform);
+
+            // Use TextMeshPro (world space)
             TextMeshPro numberText = balloon.GetComponentInChildren<TextMeshPro>();
             if (numberText != null)
                 numberText.text = numbers[i].ToString();
@@ -40,6 +45,7 @@ public class BalloonSpawner : MonoBehaviour
             sortController.Initialize();
         }
     }
+
 
     // Fisher–Yates Shuffle
     void Shuffle(List<int> list)
