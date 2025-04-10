@@ -70,12 +70,10 @@ public class LifeSystem : MonoBehaviour
         
         if (sortController != null)
         sortController.DisableInput(); // 👈 this disables the arrows
+
+        Time.timeScale = 0f;
     }
 
-    public void RestartLevel()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
 
     public void LoadMainMenu()
     {

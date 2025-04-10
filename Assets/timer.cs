@@ -66,4 +66,16 @@ public class Timer : MonoBehaviour
         Time.timeScale = 0f; // This stops the game time (pauses the game)
         Debug.Log("Game Over!");
     }
+
+    public void ResetTimer()
+    {
+        timeRemaining = 180f;
+        UpdateTimerText();
+
+        if (gameOverPanel != null)
+            gameOverPanel.SetActive(false);
+
+        Time.timeScale = 1f;
+    }
+
 }

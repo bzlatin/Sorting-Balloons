@@ -37,7 +37,7 @@ public class BalloonSpawner : MonoBehaviour
         if (sortController != null)
         {
             sortController.balloons = spawnedBalloons;
-            sortController.Initialize();
+            sortController.ResetSorting();
         }
     }
 
