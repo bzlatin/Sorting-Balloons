@@ -91,7 +91,6 @@ public class FullScreenController : MonoBehaviour
         algorithmButton.onClick.AddListener(() =>
         {
             EnterFullscreenMode();
-            StartTimer();
             algorithmButton.gameObject.SetActive(false);
             backButton.gameObject.SetActive(true);
         });
@@ -100,7 +99,6 @@ public class FullScreenController : MonoBehaviour
         backButton.onClick.AddListener(() =>
         {
             ExitFullscreenMode();
-            StopTimer();
             backButton.gameObject.SetActive(false);
             algorithmButton.gameObject.SetActive(true);
         });
@@ -142,19 +140,4 @@ public class FullScreenController : MonoBehaviour
         Debug.Log("Restored original layout");
     }
 
-    void StartTimer()
-    {
-        if (TimerManager.Instance != null)
-        {
-            TimerManager.Instance.StartTimer();
-        }
-    }
-
-    void StopTimer()
-    {
-        if (TimerManager.Instance != null)
-        {
-            TimerManager.Instance.StopTimer();
-        }
-    }
 }
