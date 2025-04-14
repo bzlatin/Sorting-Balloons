@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Sorting-Balloons-1.sln"
+    "dotnet.defaultSolution": "Sorting-Balloons.sln"
 }
