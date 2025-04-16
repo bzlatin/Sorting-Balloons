@@ -1,54 +1,90 @@
-using UnityEngine; 
-using TMPro;
+using UnityEngine;
+using TMPro;                                 // base class for all TextMeshPro types
 using System.Collections.Generic;
 
 public class BalloonSpawner : MonoBehaviour
 {
-    public GameObject balloonPrefab;         // Balloon prefab (must have TextMeshPro as child)
-    public int numberOfBalloons = 10;          // Number of balloons
-    public float spacing = 1.5f;               // Distance between them
-    public float yPosition = 0f;               // Height where they appear
-    public BubbleSortController sortController; // Bubble sort logic controller
-    public Canvas balloonsCanvas;            // Reference to the BalloonsCanvas
+    [Header("Prefab & Parent")]
+    public GameObject balloonPrefab;          // must contain a TMP text child
+    public Canvas balloonsCanvas;             // parent canvas (optional for UI)
 
-    void Start()
+    [Header("Spawn Settings")]
+    public int numberOfBalloons = 10;         // how many to show
+    public float spacing = 1.5f;              // distance between balloons (world units)
+    public float yPosition = 0f;              // row height
+
+    [Header("Sorting Logic")]
+    public BubbleSortController sortController;
+
+    /* ---------------- private ---------------- */
+    private readonly List<GameObject> spawned = new();   // track active balloons
+
+    /* ---------------- life‑cycle ------------- */
+    private void Start() => SpawnBalloons();              // first row
+
+    /* -------------------------------------------------- */
+    /*  Call this from GameManager.RestartGame()          */
+    /* -------------------------------------------------- */
+    public void ResetSpawner()
     {
-        float offset = (numberOfBalloons - 1) * spacing / 2f; // Center the row
+        // Destroy the old balloons
+        foreach (var b in spawned) Destroy(b);
+        spawned.Clear();
 
-        // Create a list to store random numbers for each balloon.
-        List<int> numbers = new List<int>();
+        // Spawn a fresh set
+        SpawnBalloons();
+    }
 
-        // Generate a random number for each balloon from 0 to 20.
-        for (int i = 0; i < numberOfBalloons; i++)
+    /* ---------------- core logic -------------- */
+    private void SpawnBalloons()
+    {
+        /* -------- 1. build shuffled pool of unique numbers -------- */
+        const int MIN_VALUE = 0;
+        const int MAX_VALUE = 20;             // inclusive
+
+        if (numberOfBalloons > (MAX_VALUE - MIN_VALUE + 1))
         {
-            numbers.Add(Random.Range(0, 21)); // Random.Range with upper bound exclusive when using int, so 21 makes it 0-20.
+            Debug.LogWarning($"Number of balloons ({numberOfBalloons}) exceeds unique range size; clamping.");
+            numberOfBalloons = MAX_VALUE - MIN_VALUE + 1;
         }
 
-        List<GameObject> spawnedBalloons = new List<GameObject>();
+        List<int> pool = new();
+        for (int i = MIN_VALUE; i <= MAX_VALUE; i++) pool.Add(i);
 
-        // Instantiate balloons and assign the random numbers.
-        for (int i = 0; i < numberOfBalloons; i++)
+        // Fisher‑Yates shuffle
+        for (int i = 0; i < pool.Count; i++)
         {
-            Vector3 spawnPos = new Vector3(i * spacing - offset, yPosition, 0f);
-            GameObject balloon = Instantiate(balloonPrefab, spawnPos, Quaternion.identity);
-
-            // Set the balloon as a child of the BalloonsCanvas.
-            balloon.transform.SetParent(balloonsCanvas.transform);
-
-            // Set the random number on the balloon using TextMeshPro (world space).
-            TextMeshPro numberText = balloon.GetComponentInChildren<TextMeshPro>();
-            if (numberText != null)
-                numberText.text = numbers[i].ToString();
-
-            spawnedBalloons.Add(balloon);
+            int j = Random.Range(i, pool.Count);
+            (pool[i], pool[j]) = (pool[j], pool[i]);
         }
 
-        // Pass the spawned balloons to the sort controller.
+        /* -------- 2. calculate horizontal offset so row is centred -------- */
+        float offset = (numberOfBalloons - 1) * spacing * 0.5f;
+
+        /* -------- 3. instantiate balloons -------- */
+        for (int i = 0; i < numberOfBalloons; i++)
+        {
+            Vector3 pos = new(i * spacing - offset, yPosition, 0f);
+
+            // parent to canvas if supplied; otherwise to spawner GameObject
+            Transform parent = balloonsCanvas != null ? balloonsCanvas.transform : transform;
+            GameObject balloon = Instantiate(balloonPrefab, pos, Quaternion.identity, parent);
+
+            // set number text
+            TMP_Text tmp = balloon.GetComponentInChildren<TMP_Text>();
+            if (tmp != null)
+                tmp.text = pool[i].ToString();
+            else
+                Debug.LogError("Balloon prefab has no TMP_Text component!");
+
+            spawned.Add(balloon);
+        }
+
+        /* -------- 4. give the list to BubbleSortController -------- */
         if (sortController != null)
         {
-            sortController.balloons = spawnedBalloons;
+            sortController.balloons = new List<GameObject>(spawned);  // copy so controller can reorder
             sortController.Initialize();
         }
     }
-
 }

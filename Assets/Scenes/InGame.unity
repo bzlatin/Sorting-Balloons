@@ -3043,6 +3043,7 @@ MonoBehaviour:
   lifeSystem: {fileID: 1980130894}
   sortController: {fileID: 997017605}
   pausePanel: {fileID: 190200515}
+  balloonSpawner: {fileID: 1646592449}
 --- !u!4 &1280106723
 Transform:
   m_ObjectHideFlags: 0
@@ -3470,11 +3471,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   balloonPrefab: {fileID: 8130654632775677324, guid: ff593d7be3bcc415780f71adc474b61d, type: 3}
+  balloonsCanvas: {fileID: 1862349685}
   numberOfBalloons: 10
   spacing: 1.5
   yPosition: 0
   sortController: {fileID: 997017605}
-  balloonsCanvas: {fileID: 1862349685}
 --- !u!4 &1646592450
 Transform:
   m_ObjectHideFlags: 0

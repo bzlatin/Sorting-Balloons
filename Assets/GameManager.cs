@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public BubbleSortController sortController;
     private bool isPaused = false;
     public GameObject pausePanel;
+    public BalloonSpawner balloonSpawner;
 
     void Start()
     {
@@ -100,5 +101,7 @@ public class GameManager : MonoBehaviour
         timer?.ResetTimer();
         sortController?.ResetSorting();
         lifeSystem?.ResetLives();
+        balloonSpawner?.ResetSpawner(); 
+    
     }
 }
