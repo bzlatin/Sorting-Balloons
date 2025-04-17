@@ -3,10 +3,15 @@ using UnityEngine.SceneManagement;
 
 public class LevelSelectorScript : MonoBehaviour
 {
-    // This function is called when the user clicks the QuickSort button
     public void OnBubbleSortButtonClick()
     {
-        // Load the InGame scene
+        PlayerPrefs.SetString("SortType", "Bubble"); 
+        SceneManager.LoadScene("InGame", LoadSceneMode.Single);
+    }
+
+    public void OnInsertionSortButtonClick()
+    {
+        PlayerPrefs.SetString("SortType", "Insertion");
         SceneManager.LoadScene("InGame", LoadSceneMode.Single);
     }
 }

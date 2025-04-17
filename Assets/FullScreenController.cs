@@ -8,10 +8,9 @@ public class FullScreenController : MonoBehaviour
     public GameObject leftPanel;
     public GameObject rightPanel;
     public Button algorithmButton;  // This is your algorithm start button
-    public Button backButton;       // New Back button
 
     // (Optional) Keep the normal text if you want to update the algorithm button text.
-    public string normalText = "QUICKSORT";
+    public string normalText = "Bubble Sort";
 
     // RectTransform caching
     private RectTransform rightPanelRT;
@@ -32,8 +31,6 @@ public class FullScreenController : MonoBehaviour
         VerifyComponents();
         SetupButtonListeners();
 
-        // Hide the Back button initially
-        backButton.gameObject.SetActive(false);
     }
 
     void InitializeReferences()
@@ -71,7 +68,6 @@ public class FullScreenController : MonoBehaviour
         if (leftPanel == null) { errorMessage += "\n- LeftPanel"; isValid = false; }
         if (rightPanel == null) { errorMessage += "\n- RightPanel"; isValid = false; }
         if (algorithmButton == null) { errorMessage += "\n- AlgorithmButton"; isValid = false; }
-        if (backButton == null) { errorMessage += "\n- BackButton"; isValid = false; }
         if (targetCanvas == null) { errorMessage += "\n- Canvas"; isValid = false; }
 
         if (!isValid)
@@ -85,23 +81,13 @@ public class FullScreenController : MonoBehaviour
     {
         // Remove all existing listeners
         algorithmButton.onClick.RemoveAllListeners();
-        backButton.onClick.RemoveAllListeners();
 
-        // When algorithm button is clicked, enter fullscreen, hide itself, show back button, and start timer.
         algorithmButton.onClick.AddListener(() =>
         {
             EnterFullscreenMode();
             algorithmButton.gameObject.SetActive(false);
-            backButton.gameObject.SetActive(true);
         });
 
-        // When back button is clicked, exit fullscreen, hide itself, show algorithm button, and stop timer.
-        backButton.onClick.AddListener(() =>
-        {
-            ExitFullscreenMode();
-            backButton.gameObject.SetActive(false);
-            algorithmButton.gameObject.SetActive(true);
-        });
     }
 
     void EnterFullscreenMode()

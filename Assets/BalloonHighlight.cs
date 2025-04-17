@@ -23,6 +23,8 @@ public class BalloonHighlight : MonoBehaviour
     {
         if (sr != null && normalSprite != null)
             sr.sprite = normalSprite;
+            sr.color = Color.white; // reset tint
+
     }
 
     public void SetHighlighted()
@@ -37,5 +39,11 @@ public class BalloonHighlight : MonoBehaviour
             sr.sprite = winnerSprite;        
     }
 
-   
+    public void SetDimmed()
+    {
+        if (sr != null)
+            sr.color = new Color(0.5f, 0.5f, 0.5f); // darker tint (grayish green)
+    }
+
+
 }

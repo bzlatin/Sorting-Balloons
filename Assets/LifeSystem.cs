@@ -8,7 +8,8 @@ public class LifeSystem : MonoBehaviour
 
     public int maxLives = 5;
     private int currentLives;
-    public BubbleSortController sortController;
+    public BubbleSortController bubbleSortController;
+    public InsertionSortController insertionSortController;
 
     public TextMeshProUGUI livesText;
     public TextMeshProUGUI statusText;
@@ -68,8 +69,8 @@ public class LifeSystem : MonoBehaviour
         if (gameOverPanel != null)
             gameOverPanel.SetActive(true);
         
-        if (sortController != null)
-        sortController.DisableInput(); // 👈 this disables the arrows
+        bubbleSortController?.DisableInput();
+        insertionSortController?.DisableInput();
 
         Time.timeScale = 0f;
     }
