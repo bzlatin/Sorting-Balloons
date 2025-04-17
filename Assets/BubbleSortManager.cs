@@ -5,14 +5,18 @@ using TMPro;
 
 public class BubbleSortController : MonoBehaviour
 {
-    public List<GameObject> balloons;
-    public GameManager gameManager;
+    [Header("Injected at runtime")]
+    public List<GameObject> balloons;   // UI balloons under RightPanel
+    public GameManager gameManager;     // handles status, mistakes, level complete
 
     private int index = 0;
     private int end;
     private bool isSwapping = false;
     private bool isActive = true;
 
+    /// <summary>
+    /// Call this after assigning balloons to reset state and highlight the first pair.
+    /// </summary>
     public void Initialize()
     {
         if (balloons == null || balloons.Count < 2)
@@ -29,18 +33,13 @@ public class BubbleSortController : MonoBehaviour
 
     void Update()
     {
-        if (!isActive || isSwapping || index + 1 >= end) return;
+        if (!isActive || isSwapping || index + 1 >= end) 
+            return;
 
         if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            Debug.Log("Left pressed");
-            HandleAction(true);
-        }
+            HandleAction( attemptSwap: true );
         else if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            Debug.Log("Right pressed");
-            HandleAction(false);
-        }
+            HandleAction( attemptSwap: false );
     }
 
     void HandleAction(bool attemptSwap)
@@ -48,6 +47,7 @@ public class BubbleSortController : MonoBehaviour
         int a = GetValue(index);
         int b = GetValue(index + 1);
 
+        // If a > b we should swap; if not, we should skip
         if (a > b)
         {
             if (!attemptSwap)
@@ -70,6 +70,7 @@ public class BubbleSortController : MonoBehaviour
             gameManager.UpdateStatus($"Correctly skipped {a} and {b}");
         }
 
+        // Advance to next pair
         index++;
         if (index + 1 >= end)
         {
@@ -82,46 +83,55 @@ public class BubbleSortController : MonoBehaviour
 
     int GetValue(int i)
     {
-        var tmp = balloons[i].GetComponentInChildren<TextMeshPro>();
-        return tmp != null ? int.Parse(tmp.text) : 0;
+        // Use TextMeshProUGUI for UI balloons
+        var tmp = balloons[i].GetComponentInChildren<TextMeshProUGUI>();
+        if (tmp == null)
+        {
+            Debug.LogError($"Balloon at index {i} missing TextMeshProUGUI");
+            return 0;
+        }
+        return int.Parse(tmp.text);
     }
 
     void Swap(int i, int j)
     {
-        if (!isSwapping) StartCoroutine(SwapVisuals(i, j));
+        if (!isSwapping)
+            StartCoroutine(SwapVisuals(i, j));
     }
 
     IEnumerator SwapVisuals(int i, int j)
     {
         isSwapping = true;
 
-        GameObject a = balloons[i];
-        GameObject b = balloons[j];
+        // Grab RectTransforms
+        var aRT = balloons[i].GetComponent<RectTransform>();
+        var bRT = balloons[j].GetComponent<RectTransform>();
+        Vector2 startA = aRT.anchoredPosition;
+        Vector2 startB = bRT.anchoredPosition;
 
-        Vector3 posA = a.transform.position;
-        Vector3 posB = b.transform.position;
-
+        // Animate over 0.25s
         float duration = 0.25f;
         float elapsed = 0f;
-
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
             float t = Mathf.Clamp01(elapsed / duration);
-
-            a.transform.position = Vector3.Lerp(posA, posB, t);
-            b.transform.position = Vector3.Lerp(posB, posA, t);
+            aRT.anchoredPosition = Vector2.Lerp(startA, startB, t);
+            bRT.anchoredPosition = Vector2.Lerp(startB, startA, t);
             yield return null;
         }
 
-        a.transform.position = posB;
-        b.transform.position = posA;
+        // Snap to final
+        aRT.anchoredPosition = startB;
+        bRT.anchoredPosition = startA;
 
+        // Swap in list
         (balloons[i], balloons[j]) = (balloons[j], balloons[i]);
 
         UpdateHighlight();
         yield return new WaitForSeconds(0.05f);
 
+        // If sorted, highlight winners and finish
         if (IsSorted())
         {
             HighlightAsWinners();
@@ -134,12 +144,9 @@ public class BubbleSortController : MonoBehaviour
 
     bool IsSorted()
     {
-        for (int i = 0; i < balloons.Count - 1; i++)
-        {
-            if (GetValue(i) > GetValue(i + 1))
+        for (int k = 0; k < balloons.Count - 1; k++)
+            if (GetValue(k) > GetValue(k + 1))
                 return false;
-        }
-
         return true;
     }
 
@@ -151,22 +158,25 @@ public class BubbleSortController : MonoBehaviour
 
     void UpdateHighlight()
     {
-        for (int i = 0; i < balloons.Count; i++)
+        for (int k = 0; k < balloons.Count; k++)
         {
-            var highlight = balloons[i].GetComponent<BalloonHighlight>();
+            var highlight = balloons[k].GetComponent<BalloonHighlight>();
             if (highlight == null) continue;
 
-            if (i == index || i == index + 1)
+            if (k == index || k == index + 1)
                 highlight.SetHighlighted();
             else
                 highlight.SetNormal();
         }
     }
 
+    /// <summary>
+    /// Stops input processing mid‑sort.
+    /// </summary>
     public void DisableInput() => isActive = false;
 
-    public void ResetSorting()
-    {        
-        Initialize();
-    }
+    /// <summary>
+    /// Resets to the initial unsorted state.
+    /// </summary>
+    public void ResetSorting() => Initialize();
 }
