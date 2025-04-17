@@ -1943,6 +1943,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 828120737}
   m_CullTransparentMesh: 1
+--- !u!1 &860590623
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 860590625}
+  - component: {fileID: 860590624}
+  m_Layer: 0
+  m_Name: InsertionSortController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &860590624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 860590623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baeb7b25a93734081990b9283a0bb5e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  balloons: []
+  gameManager: {fileID: 1280106722}
+--- !u!4 &860590625
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 860590623}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &942383537
 GameObject:
   m_ObjectHideFlags: 0
@@ -3041,9 +3087,10 @@ MonoBehaviour:
   statusText: {fileID: 1001920534}
   timer: {fileID: 1731132456}
   lifeSystem: {fileID: 1980130894}
-  sortController: {fileID: 997017605}
   pausePanel: {fileID: 190200515}
   balloonSpawner: {fileID: 1646592449}
+  bubbleSortController: {fileID: 997017605}
+  insertionSortController: {fileID: 860590624}
 --- !u!4 &1280106723
 Transform:
   m_ObjectHideFlags: 0
@@ -3475,7 +3522,10 @@ MonoBehaviour:
   numberOfBalloons: 10
   spacing: 1.5
   yPosition: 0
-  sortController: {fileID: 997017605}
+  bubbleSortController: {fileID: 997017605}
+  insertionSortController: {fileID: 860590624}
+  sortType: 1
+  gameManager: {fileID: 1280106722}
 --- !u!4 &1646592450
 Transform:
   m_ObjectHideFlags: 0
@@ -3548,7 +3598,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Game Over!
+  m_text: You Win!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4229,7 +4279,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxLives: 5
-  sortController: {fileID: 997017605}
+  bubbleSortController: {fileID: 997017605}
+  insertionSortController: {fileID: 860590624}
   livesText: {fileID: 505201553}
   statusText: {fileID: 1001920534}
   gameOverPanel: {fileID: 1744340728}
@@ -4754,6 +4805,7 @@ SceneRoots:
   - {fileID: 1646592450}
   - {fileID: 1327425590}
   - {fileID: 997017606}
+  - {fileID: 860590625}
   - {fileID: 1810513592}
   - {fileID: 1980130895}
   - {fileID: 1280106723}

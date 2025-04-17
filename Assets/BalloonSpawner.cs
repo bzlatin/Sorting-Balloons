@@ -1,44 +1,55 @@
 using UnityEngine;
-using TMPro;                                 // base class for all TextMeshPro types
+using TMPro;
+using System.Collections;
 using System.Collections.Generic;
+
+public enum SortType
+{
+    Bubble,
+    Insertion
+}
 
 public class BalloonSpawner : MonoBehaviour
 {
     [Header("Prefab & Parent")]
-    public GameObject balloonPrefab;          // must contain a TMP text child
-    public Canvas balloonsCanvas;             // parent canvas (optional for UI)
+    public GameObject balloonPrefab;
+    public Canvas balloonsCanvas;
 
     [Header("Spawn Settings")]
     public int numberOfBalloons = 10;         
-    public float spacing = 1.5f;              // distance between balloons (world units)
-    public float yPosition = 0f;              // row height
+    public float spacing = 1.5f;              
+    public float yPosition = 0f;              
 
     [Header("Sorting Logic")]
-    public BubbleSortController sortController;
+    public BubbleSortController bubbleSortController;
+    public InsertionSortController insertionSortController;
+    public SortType sortType;
+    public GameManager gameManager;
 
-    
-    private readonly List<GameObject> spawned = new();   // track active balloons
+    private readonly List<GameObject> spawned = new();
 
-   
-    private void Start() => SpawnBalloons();              // first row
+    void Start()
+    {
+        string sortTypeStr = PlayerPrefs.GetString("SortType", "Bubble");
+        sortType = sortTypeStr == "Insertion" ? SortType.Insertion : SortType.Bubble;
 
-   
+        SpawnBalloons();
+        StartCoroutine(InitializeSortAfterFrame());
+    }
+
     public void ResetSpawner()
     {
-        
         foreach (var b in spawned) Destroy(b);
         spawned.Clear();
 
-        
         SpawnBalloons();
+        StartCoroutine(InitializeSortAfterFrame());
     }
 
- 
     private void SpawnBalloons()
     {
-        
         const int MIN_VALUE = 0;
-        const int MAX_VALUE = 20;             // inclusive
+        const int MAX_VALUE = 20;
 
         if (numberOfBalloons > (MAX_VALUE - MIN_VALUE + 1))
         {
@@ -49,26 +60,20 @@ public class BalloonSpawner : MonoBehaviour
         List<int> pool = new();
         for (int i = MIN_VALUE; i <= MAX_VALUE; i++) pool.Add(i);
 
-        // Fisher‑Yates shuffle
         for (int i = 0; i < pool.Count; i++)
         {
             int j = Random.Range(i, pool.Count);
             (pool[i], pool[j]) = (pool[j], pool[i]);
         }
 
-       
         float offset = (numberOfBalloons - 1) * spacing * 0.5f;
 
-       
         for (int i = 0; i < numberOfBalloons; i++)
         {
             Vector3 pos = new(i * spacing - offset, yPosition, 0f);
-
-            // parent to canvas if supplied; otherwise to spawner GameObject
             Transform parent = balloonsCanvas != null ? balloonsCanvas.transform : transform;
             GameObject balloon = Instantiate(balloonPrefab, pos, Quaternion.identity, parent);
 
-            // set number text
             TMP_Text tmp = balloon.GetComponentInChildren<TMP_Text>();
             if (tmp != null)
                 tmp.text = pool[i].ToString();
@@ -77,12 +82,11 @@ public class BalloonSpawner : MonoBehaviour
 
             spawned.Add(balloon);
         }
+    }
 
-       
-        if (sortController != null)
-        {
-            sortController.balloons = new List<GameObject>(spawned);  // copy so controller can reorder
-            sortController.Initialize();
-        }
+    private IEnumerator InitializeSortAfterFrame()
+    {
+        yield return null;
+        gameManager.InitializeActiveSort(new List<GameObject>(spawned));
     }
 }
