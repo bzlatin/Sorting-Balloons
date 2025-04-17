@@ -16,9 +16,9 @@ public class BalloonSpawner : MonoBehaviour
     public Canvas balloonsCanvas;
 
     [Header("Spawn Settings")]
-    public int numberOfBalloons = 10;
-    public float spacing = 1.5f;
-    public float yPosition = 0f;
+    public int numberOfBalloons = 10;         
+    public float spacing = 1.5f;              
+    public float yPosition = 0f;              
 
     [Header("Sorting Logic")]
     public BubbleSortController bubbleSortController;
@@ -86,7 +86,7 @@ public class BalloonSpawner : MonoBehaviour
 
     private IEnumerator InitializeSortAfterFrame()
     {
-        yield return null; // Wait one frame so GameManager has activated the correct controller
+        yield return null;
         gameManager.InitializeActiveSort(new List<GameObject>(spawned));
     }
 }
