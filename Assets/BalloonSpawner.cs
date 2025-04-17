@@ -9,36 +9,34 @@ public class BalloonSpawner : MonoBehaviour
     public Canvas balloonsCanvas;             // parent canvas (optional for UI)
 
     [Header("Spawn Settings")]
-    public int numberOfBalloons = 10;         // how many to show
+    public int numberOfBalloons = 10;         
     public float spacing = 1.5f;              // distance between balloons (world units)
     public float yPosition = 0f;              // row height
 
     [Header("Sorting Logic")]
     public BubbleSortController sortController;
 
-    /* ---------------- private ---------------- */
+    
     private readonly List<GameObject> spawned = new();   // track active balloons
 
-    /* ---------------- life‑cycle ------------- */
+   
     private void Start() => SpawnBalloons();              // first row
 
-    /* -------------------------------------------------- */
-    /*  Call this from GameManager.RestartGame()          */
-    /* -------------------------------------------------- */
+   
     public void ResetSpawner()
     {
-        // Destroy the old balloons
+        
         foreach (var b in spawned) Destroy(b);
         spawned.Clear();
 
-        // Spawn a fresh set
+        
         SpawnBalloons();
     }
 
-    /* ---------------- core logic -------------- */
+ 
     private void SpawnBalloons()
     {
-        /* -------- 1. build shuffled pool of unique numbers -------- */
+        
         const int MIN_VALUE = 0;
         const int MAX_VALUE = 20;             // inclusive
 
@@ -58,10 +56,10 @@ public class BalloonSpawner : MonoBehaviour
             (pool[i], pool[j]) = (pool[j], pool[i]);
         }
 
-        /* -------- 2. calculate horizontal offset so row is centred -------- */
+       
         float offset = (numberOfBalloons - 1) * spacing * 0.5f;
 
-        /* -------- 3. instantiate balloons -------- */
+       
         for (int i = 0; i < numberOfBalloons; i++)
         {
             Vector3 pos = new(i * spacing - offset, yPosition, 0f);
@@ -80,7 +78,7 @@ public class BalloonSpawner : MonoBehaviour
             spawned.Add(balloon);
         }
 
-        /* -------- 4. give the list to BubbleSortController -------- */
+       
         if (sortController != null)
         {
             sortController.balloons = new List<GameObject>(spawned);  // copy so controller can reorder
