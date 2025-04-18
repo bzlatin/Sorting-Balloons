@@ -6,11 +6,13 @@ using TMPro;
 public class BubbleSortUIController : MonoBehaviour
 {
     [HideInInspector] public List<GameObject> balloons;   // set by BalloonSpawnerUI
+
     [Header("References")]
-    public BalloonSpawnerUI spawner;                      // ← drag the spawner here
+    public BalloonSpawnerUI spawner;                      // drag your UI spawner here
 
     [Header("Animation")]
     public float stepInterval = 0.6f;                     // seconds between compare steps
+
     [Header("Cycle")]
     public float restartDelay = 1.0f;                     // pause before spawning next row
 
@@ -19,13 +21,12 @@ public class BubbleSortUIController : MonoBehaviour
     private bool isSwapping;
     private Coroutine autoRoutine;
 
-    /* ───────────────────────────── INITIALISE ───────────────────────────── */
 
     public void Initialize()
     {
         if (balloons == null || balloons.Count < 2)
         {
-            Debug.LogError("▶ Init FAILED — balloon list null or too small.");
+            Debug.LogError("BubbleSortUIController: balloon list null or too small.");
             return;
         }
 
@@ -33,43 +34,45 @@ public class BubbleSortUIController : MonoBehaviour
         end        = balloons.Count;
         isSwapping = false;
 
-        Debug.Log($"▶ Init OK — {balloons.Count} balloons, first compare 0 & 1");
+        // Highlight the first pair immediately
         UpdateHighlight();
 
+        // Restart the auto‑sort coroutine
         if (autoRoutine != null) StopCoroutine(autoRoutine);
         autoRoutine = StartCoroutine(AutoSortLoop());
     }
 
-    /* ───────────────────────────── AUTO LOOP ────────────────────────────── */
 
     private IEnumerator AutoSortLoop()
     {
-        yield return null;                                  // let first frame render
+        // Wait a full stepInterval before the very first move
+        yield return new WaitForSeconds(stepInterval);
 
         while (end > 1)
         {
+            // Wait for any ongoing swap to finish
             yield return new WaitUntil(() => !isSwapping);
+
+            // Perform one compare-and-swap step
             StepAutomatic();
+
+            // Wait before the next step
             yield return new WaitForSeconds(stepInterval);
         }
 
-        Debug.Log("▶ Sort complete — clearing highlights");
+        // Clear highlights when sorted
         ClearAllHighlights();
 
-        // small pause, then spawn a new batch and start again
+        // Wait before spawning a new row
         yield return new WaitForSeconds(restartDelay);
 
+        // Spawn next batch and re-initialize
         if (spawner != null)
-        {
-            spawner.ResetSpawnerUI();           // makes new balloons + calls Initialize again
-        }
+            spawner.ResetSpawnerUI();
         else
-        {
             Debug.LogWarning("BubbleSortUIController: no spawner reference set.");
-        }
     }
 
-    /* ───────────────────────────── ONE STEP ─────────────────────────────── */
 
     private void StepAutomatic()
     {
@@ -77,27 +80,28 @@ public class BubbleSortUIController : MonoBehaviour
 
         int a = GetValue(index);
         int b = GetValue(index + 1);
-        Debug.Log($"▶ Compare index {index} val {a}  vs  {index+1} val {b}");
 
-        if (a > b) Swap(index, index + 1);
-        else       AdvanceIndices();
+        if (a > b) 
+            Swap(index, index + 1);
+        else       
+            AdvanceIndices();
     }
 
-    /* ───────────────────────────── SWAP ANIMATION ──────────────────────── */
 
     private int GetValue(int i) =>
         int.Parse(balloons[i].GetComponentInChildren<TextMeshProUGUI>().text);
 
     private void Swap(int i, int j)
     {
-        if (!isSwapping) StartCoroutine(SwapVisuals(i, j));
+        if (!isSwapping)
+            StartCoroutine(SwapVisuals(i, j));
     }
 
     private IEnumerator SwapVisuals(int i, int j)
     {
         isSwapping = true;
-        Debug.Log($"▶ Swapping {i}<->{j}");
 
+        // Keep the two balloons highlighted while they move
         SetHighlighted(i, j);
 
         RectTransform aRT = balloons[i].GetComponent<RectTransform>();
@@ -116,6 +120,7 @@ public class BubbleSortUIController : MonoBehaviour
             yield return null;
         }
 
+        // Snap to final positions and swap references
         aRT.anchoredPosition = startB;
         bRT.anchoredPosition = startA;
         (balloons[i], balloons[j]) = (balloons[j], balloons[i]);
@@ -124,7 +129,6 @@ public class BubbleSortUIController : MonoBehaviour
         AdvanceIndices();
     }
 
-   
 
     private void AdvanceIndices()
     {
@@ -143,26 +147,19 @@ public class BubbleSortUIController : MonoBehaviour
 
     private void SetHighlighted(int a, int b)
     {
-        
         for (int k = 0; k < balloons.Count; k++)
         {
             var h = balloons[k].GetComponent<BalloonHighlightUI>();
-            if (h == null)
-            {
-                
-                continue;
-            }
+            if (h == null) continue;
 
-            if (k == a || k == b) 
-            h.SetHighlighted();
-            else                  
-            h.SetNormal();
+            if (k == a || k == b) h.SetHighlighted();
+            else                  h.SetNormal();
         }
     }
 
     private void ClearAllHighlights()
     {
         foreach (var go in balloons)
-            go.GetComponent<BalloonHighlight>()?.SetNormal();
+            go.GetComponent<BalloonHighlightUI>()?.SetNormal();
     }
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.EventSystems;
-
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,25 +9,47 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI statusText;
     public Timer timer;
     public LifeSystem lifeSystem;
-    public BubbleSortController sortController;
-    private bool isPaused = false;
     public GameObject pausePanel;
     public BalloonSpawner balloonSpawner;
 
+    public BubbleSortController bubbleSortController;
+    public InsertionSortController insertionSortController;
+
+    private Dictionary<SortType, MonoBehaviour> sortControllers = new();
+    private SortType activeSortType;
+    private bool isPaused = false;
+
     void Start()
     {
-        // Ensure game time is running
         Time.timeScale = 1f;
         isPaused = false;
 
-        // Hide pause panel if it is visible
         if (pausePanel != null)
             pausePanel.SetActive(false);
 
         EventSystem.current.SetSelectedGameObject(null);
+
+        // Map available sort controllers
+        sortControllers = new Dictionary<SortType, MonoBehaviour>
+        {
+            { SortType.Bubble, bubbleSortController },
+            { SortType.Insertion, insertionSortController }
+        };
+
+        // Determine selected sort type
+        string type = PlayerPrefs.GetString("SortType", "Bubble");
+        activeSortType = type == "Insertion" ? SortType.Insertion : SortType.Bubble;
+
+        // Enable only the selected controller
+        foreach (var kvp in sortControllers)
+        {
+            bool isActive = kvp.Key == activeSortType;
+            if (kvp.Value != null)
+                kvp.Value.gameObject.SetActive(isActive);
+        }
+
+        // BalloonSpawner will call InitializeActiveSort after spawning
     }
-
-
 
     public void UpdateStatus(string message)
     {
@@ -61,7 +83,6 @@ public class GameManager : MonoBehaviour
             pausePanel.SetActive(false);
     }
 
-
     public void OnPlayerMistake(string message)
     {
         UpdateStatus(message);
@@ -73,7 +94,6 @@ public class GameManager : MonoBehaviour
         UpdateStatus("Sorted!");
         ShowWinScreen();
         Time.timeScale = 0f;
-
     }
 
     public void ShowWinScreen()
@@ -85,23 +105,59 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
-        // Unpause time in case it was paused
         Time.timeScale = 1f;
         isPaused = false;
 
-        // Hide pause panel if active
-        if (pausePanel != null)
-            pausePanel.SetActive(false);
-
-        if (winPanel != null)
-            winPanel.SetActive(false);
+        if (pausePanel != null) pausePanel.SetActive(false);
+        if (winPanel != null) winPanel.SetActive(false);
 
         UpdateStatus("");
 
+        // Disable all controllers
+        foreach (var controller in sortControllers.Values)
+        {
+            if (controller is BubbleSortController bubble)
+                bubble.DisableInput();
+            else if (controller is InsertionSortController insertion)
+                insertion.DisableInput();
+        }
+
+        // Enable only active controller
+        foreach (var kvp in sortControllers)
+        {
+            bool isActive = kvp.Key == activeSortType;
+            if (kvp.Value != null)
+                kvp.Value.gameObject.SetActive(isActive);
+        }
+
+        StopAllCoroutines();
         timer?.ResetTimer();
-        sortController?.ResetSorting();
         lifeSystem?.ResetLives();
-        balloonSpawner?.ResetSpawner(); 
-    
+
+        // BalloonSpawner will call InitializeActiveSort when it's done
+        balloonSpawner?.ResetSpawner();
+    }
+
+    public void InitializeActiveSort(List<GameObject> balloons)
+    {
+        if (sortControllers.TryGetValue(activeSortType, out var controller))
+        {
+            if (controller == null || !controller.gameObject.activeInHierarchy)
+            {
+                Debug.LogWarning($"Sort controller for {activeSortType} is not active. Skipping init.");
+                return;
+            }
+
+            if (controller is BubbleSortController bubble)
+            {
+                bubble.balloons = balloons;
+                bubble.Initialize();
+            }
+            else if (controller is InsertionSortController insertion)
+            {
+                insertion.balloons = balloons;
+                insertion.Initialize();
+            }
+        }
     }
 }

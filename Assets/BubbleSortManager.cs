@@ -21,7 +21,8 @@ public class BubbleSortController : MonoBehaviour
     {
         if (balloons == null || balloons.Count < 2)
         {
-            Debug.LogError("BubbleSortManager: balloon list null or too small.");
+            Debug.LogError("Balloon list not assigned or too short.");
+            isActive = false;
             return;
         }
 
