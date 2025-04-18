@@ -632,6 +632,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   balloons: []
   gameManager: {fileID: 0}
+  autoSort: 0
+  autoDelay: 0.3
 --- !u!4 &487806124
 Transform:
   m_ObjectHideFlags: 0
@@ -1335,8 +1337,8 @@ MonoBehaviour:
   rightPanel: {fileID: 234061257}
   balloonPrefab: {fileID: 2594834193116564500, guid: 3311ff19b5927434a802fcfdb61a5752, type: 3}
   sortController: {fileID: 487806123}
-  numberOfBalloons: 10
-  spacing: 100
+  numberOfBalloons: 8
+  spacing: 120
 --- !u!4 &1401002023
 Transform:
   m_ObjectHideFlags: 0
