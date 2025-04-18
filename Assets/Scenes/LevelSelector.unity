@@ -360,6 +360,111 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: -1
   m_TargetDisplay: 0
+--- !u!1001 &205060828
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1544963309326479065, guid: 3311ff19b5927434a802fcfdb61a5752, type: 3}
+      propertyPath: normalSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e131d3f5ff927e6479ae65d64b422d0e, type: 3}
+    - target: {fileID: 1544963309326479065, guid: 3311ff19b5927434a802fcfdb61a5752, type: 3}
+      propertyPath: highlightSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: edcf902d92ebef247b8c872e49d9730a, type: 3}
+    - target: {fileID: 2594834193116564500, guid: 3311ff19b5927434a802fcfdb61a5752, type: 3}
+      propertyPath: m_Name
+      value: UI_Ballon
+      objectReference: {fileID: 0}
+    - target: {fileID: 6863811568546801652, guid: 3311ff19b5927434a802fcfdb61a5752, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6863811568546801652, guid: 3311ff19b5927434a802fcfdb61a5752, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6863811568546801652, guid: 3311ff19b5927434a802fcfdb61a5752, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6863811568546801652, guid: 3311ff19b5927434a802fcfdb61a5752, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6863811568546801652, guid: 3311ff19b5927434a802fcfdb61a5752, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6863811568546801652, guid: 3311ff19b5927434a802fcfdb61a5752, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6863811568546801652, guid: 3311ff19b5927434a802fcfdb61a5752, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6863811568546801652, guid: 3311ff19b5927434a802fcfdb61a5752, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6863811568546801652, guid: 3311ff19b5927434a802fcfdb61a5752, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6863811568546801652, guid: 3311ff19b5927434a802fcfdb61a5752, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6863811568546801652, guid: 3311ff19b5927434a802fcfdb61a5752, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6863811568546801652, guid: 3311ff19b5927434a802fcfdb61a5752, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6863811568546801652, guid: 3311ff19b5927434a802fcfdb61a5752, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6863811568546801652, guid: 3311ff19b5927434a802fcfdb61a5752, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6863811568546801652, guid: 3311ff19b5927434a802fcfdb61a5752, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6863811568546801652, guid: 3311ff19b5927434a802fcfdb61a5752, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6863811568546801652, guid: 3311ff19b5927434a802fcfdb61a5752, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6863811568546801652, guid: 3311ff19b5927434a802fcfdb61a5752, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6863811568546801652, guid: 3311ff19b5927434a802fcfdb61a5752, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6863811568546801652, guid: 3311ff19b5927434a802fcfdb61a5752, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3311ff19b5927434a802fcfdb61a5752, type: 3}
 --- !u!1 &234061256
 GameObject:
   m_ObjectHideFlags: 0
@@ -601,54 +706,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b81dc773ea9c50243bb62b222bc254af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &487806122
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 487806124}
-  - component: {fileID: 487806123}
-  m_Layer: 0
-  m_Name: BubbleSortManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &487806123
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 487806122}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 410bede63c67748d5b58cd757c081eac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  balloons: []
-  gameManager: {fileID: 0}
-  autoSort: 0
-  autoDelay: 0.3
---- !u!4 &487806124
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 487806122}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 22.88526, y: 2.7753105, z: -3.3619132}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &496728064
 GameObject:
   m_ObjectHideFlags: 0
@@ -960,6 +1017,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 800606507}
   m_CullTransparentMesh: 1
+--- !u!1 &920824365
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 920824367}
+  - component: {fileID: 920824366}
+  m_Layer: 0
+  m_Name: BubbleSortUIController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &920824366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 920824365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2470a0015d6ae984a847bc129323f04c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  balloons: []
+  spawner: {fileID: 1401002022}
+  stepInterval: 0.5
+  restartDelay: 1
+--- !u!4 &920824367
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 920824365}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 181.87767, y: 329.5063, z: 0.061946213}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &927840907
 GameObject:
   m_ObjectHideFlags: 0
@@ -1336,7 +1441,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rightPanel: {fileID: 234061257}
   balloonPrefab: {fileID: 2594834193116564500, guid: 3311ff19b5927434a802fcfdb61a5752, type: 3}
-  sortController: {fileID: 487806123}
+  sortController: {fileID: 920824366}
   numberOfBalloons: 8
   spacing: 120
 --- !u!4 &1401002023
@@ -1681,4 +1786,5 @@ SceneRoots:
   - {fileID: 1360538637}
   - {fileID: 620497815}
   - {fileID: 1401002023}
-  - {fileID: 487806124}
+  - {fileID: 920824367}
+  - {fileID: 205060828}

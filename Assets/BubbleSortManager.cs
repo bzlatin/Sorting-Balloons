@@ -3,22 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-/// <summary>
-/// Bubble‑sort controller for the **in‑game** row (world‑space balloons).
-/// Spawn balloons with <see cref="BalloonSpawner"/> then call <c>Initialize()</c>.
-/// </summary>
+
 public class BubbleSortController : MonoBehaviour
 {
     [Header("Injected at runtime")]
-    public List<GameObject> balloons;   // populated by BalloonSpawner
+    public List<GameObject> balloons;   
     public GameManager      gameManager;
 
-    private int  index;        // current comparison index
-    private int  end;          // shrinking unsorted tail
+    private int  index;        
+    private int  end;          
     private bool isSwapping;
     private bool isActive;
 
-    /* ───────────────────────────────────────── PUBLIC ───────────────────────────────────────── */
+    
 
     public void Initialize()
     {
@@ -39,7 +36,7 @@ public class BubbleSortController : MonoBehaviour
     public void DisableInput() => isActive = false;
     public void ResetSorting() => Initialize();
 
-    /* ───────────────────────────────────────── UNITY ───────────────────────────────────────── */
+    
 
     private void Update()
     {
@@ -51,7 +48,7 @@ public class BubbleSortController : MonoBehaviour
             HandleAction(attemptSwap: false);         // player *skips* swap
     }
 
-    /* ───────────────────────────────────────── CORE LOGIC ──────────────────────────────────── */
+    
 
     private void HandleAction(bool attemptSwap)
     {
@@ -93,7 +90,7 @@ public class BubbleSortController : MonoBehaviour
         return int.Parse(tmp.text);
     }
 
-    /* ───────────────────────────────────────── ANIMATION ───────────────────────────────────── */
+  
 
     private void Swap(int i, int j)
     {
@@ -128,7 +125,7 @@ public class BubbleSortController : MonoBehaviour
         AdvanceIndices();
     }
 
-    /* ───────────────────────────────────────── HELPERS ─────────────────────────────────────── */
+   
 
     private void AdvanceIndices()
     {
