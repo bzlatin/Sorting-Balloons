@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+
 public class BubbleSortController : MonoBehaviour
 {
-    public List<GameObject> balloons;
-    public GameManager gameManager;
+    [Header("Injected at runtime")]
+    public List<GameObject> balloons;   
+    public GameManager      gameManager;
 
-    private int index = 0;
-    private int end;
-    private bool isSwapping = false;
-    private bool isActive = true;
+    private int  index;        
+    private int  end;          
+    private bool isSwapping;
+    private bool isActive;
+
+    
 
     public void Initialize()
     {
@@ -23,54 +27,109 @@ public class BubbleSortController : MonoBehaviour
         }
 
         index = 0;
-        end = balloons.Count;
-        isActive = true;
+        end   = balloons.Count;
+        isActive   = true;
+        isSwapping = false;
+
         UpdateHighlight();
     }
 
-    void Update()
+    public void DisableInput() => isActive = false;
+    public void ResetSorting() => Initialize();
+
+    
+
+    private void Update()
     {
         if (!isActive || isSwapping || index + 1 >= end) return;
 
         if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            Debug.Log("Left pressed");
-            HandleAction(true);
-        }
+            HandleAction(attemptSwap: true);          // player *wants* to swap
         else if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            Debug.Log("Right pressed");
-            HandleAction(false);
-        }
+            HandleAction(attemptSwap: false);         // player *skips* swap
     }
 
-    void HandleAction(bool attemptSwap)
+    
+
+    private void HandleAction(bool attemptSwap)
     {
         int a = GetValue(index);
         int b = GetValue(index + 1);
+        bool shouldSwap = a > b;
 
-        if (a > b)
+        if (shouldSwap && !attemptSwap)
         {
-            if (!attemptSwap)
-            {
-                gameManager.OnPlayerMistake("You should have swapped!");
-                return;
-            }
+            gameManager.OnPlayerMistake("You should have swapped!");
+            return;
+        }
+        if (!shouldSwap && attemptSwap)
+        {
+            gameManager.OnPlayerMistake("You shouldn't have swapped!");
+            return;
+        }
 
-            Swap(index, index + 1);
+        if (shouldSwap)
+        {
             gameManager.UpdateStatus($"Swapped {a} and {b}");
+            Swap(index, index + 1);
         }
         else
         {
-            if (attemptSwap)
-            {
-                gameManager.OnPlayerMistake("You shouldn't have swapped!");
-                return;
-            }
-
             gameManager.UpdateStatus($"Correctly skipped {a} and {b}");
+            AdvanceIndices();
+        }
+    }
+
+    private int GetValue(int i)
+    {
+        TextMeshPro tmp = balloons[i].GetComponentInChildren<TextMeshPro>();
+        if (tmp == null)
+        {
+            Debug.LogError($"Balloon at index {i} is missing a TextMeshPro component!");
+            return 0;
+        }
+        return int.Parse(tmp.text);
+    }
+
+  
+
+    private void Swap(int i, int j)
+    {
+        if (!isSwapping)
+            StartCoroutine(SwapVisuals(i, j));
+    }
+
+    private IEnumerator SwapVisuals(int i, int j)
+    {
+        isSwapping = true;
+
+        Transform aT = balloons[i].transform;
+        Transform bT = balloons[j].transform;
+        Vector3 startA = aT.position;
+        Vector3 startB = bT.position;
+
+        float dur = 0.25f, t = 0f;
+        while (t < dur)
+        {
+            t += Time.deltaTime;
+            float u = Mathf.Clamp01(t / dur);
+            aT.position = Vector3.Lerp(startA, startB, u);
+            bT.position = Vector3.Lerp(startB, startA, u);
+            yield return null;
         }
 
+        aT.position = startB;
+        bT.position = startA;
+        (balloons[i], balloons[j]) = (balloons[j], balloons[i]);
+
+        isSwapping = false;
+        AdvanceIndices();
+    }
+
+   
+
+    private void AdvanceIndices()
+    {
         index++;
         if (index + 1 >= end)
         {
@@ -79,95 +138,40 @@ public class BubbleSortController : MonoBehaviour
         }
 
         UpdateHighlight();
-    }
 
-    int GetValue(int i)
-    {
-        var tmp = balloons[i].GetComponentInChildren<TextMeshPro>();
-        return tmp != null ? int.Parse(tmp.text) : 0;
-    }
-
-    void Swap(int i, int j)
-    {
-        if (!isSwapping) StartCoroutine(SwapVisuals(i, j));
-    }
-
-    IEnumerator SwapVisuals(int i, int j)
-    {
-        isSwapping = true;
-
-        GameObject a = balloons[i];
-        GameObject b = balloons[j];
-
-        Vector3 posA = a.transform.position;
-        Vector3 posB = b.transform.position;
-
-        float duration = 0.25f;
-        float elapsed = 0f;
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / duration);
-
-            a.transform.position = Vector3.Lerp(posA, posB, t);
-            b.transform.position = Vector3.Lerp(posB, posA, t);
-            yield return null;
-        }
-
-        a.transform.position = posB;
-        b.transform.position = posA;
-
-        (balloons[i], balloons[j]) = (balloons[j], balloons[i]);
-
-        UpdateHighlight();
-        yield return new WaitForSeconds(0.05f);
-
-        if (IsSorted())
+        if (end <= 1 || IsSorted())
         {
             HighlightAsWinners();
             isActive = false;
             gameManager.OnLevelComplete();
         }
-
-        isSwapping = false;
     }
 
-    bool IsSorted()
+    private bool IsSorted()
     {
-        for (int i = 0; i < balloons.Count - 1; i++)
-        {
-            if (GetValue(i) > GetValue(i + 1))
+        for (int k = 0; k < balloons.Count - 1; k++)
+            if (GetValue(k) > GetValue(k + 1))
                 return false;
-        }
-
         return true;
     }
 
-    void HighlightAsWinners()
+    private void UpdateHighlight()
     {
-        foreach (var b in balloons)
-            b.GetComponent<BalloonHighlight>()?.SetWinner();
-    }
-
-    void UpdateHighlight()
-    {
-        for (int i = 0; i < balloons.Count; i++)
+        for (int k = 0; k < balloons.Count; k++)
         {
-            var highlight = balloons[i].GetComponent<BalloonHighlight>();
-            if (highlight == null) continue;
+            var h = balloons[k].GetComponent<BalloonHighlight>();
+            if (h == null) continue;
 
-            if (i == index || i == index + 1)
-                highlight.SetHighlighted();
+            if (k == index || k == index + 1)
+                h.SetHighlighted();
             else
-                highlight.SetNormal();
+                h.SetNormal();
         }
     }
 
-    public void DisableInput() => isActive = false;
-
-    public void ResetSorting()
-    {        
-        Initialize();
+    private void HighlightAsWinners()
+    {
+        foreach (var b in balloons)
+            b.GetComponent<BalloonHighlight>()?.SetWinner();
     }
 }
