@@ -6,7 +6,8 @@ using System.Collections.Generic;
 public enum SortType
 {
     Bubble,
-    Insertion
+    Insertion,
+    Selection
 }
 
 public class BalloonSpawner : MonoBehaviour
@@ -23,6 +24,7 @@ public class BalloonSpawner : MonoBehaviour
     [Header("Sorting Logic")]
     public BubbleSortController bubbleSortController;
     public InsertionSortController insertionSortController;
+    public SelectionSortController selectionSortController; 
     public SortType sortType;
     public GameManager gameManager;
 
@@ -31,7 +33,14 @@ public class BalloonSpawner : MonoBehaviour
     void Start()
     {
         string sortTypeStr = PlayerPrefs.GetString("SortType", "Bubble");
-        sortType = sortTypeStr == "Insertion" ? SortType.Insertion : SortType.Bubble;
+        
+
+        if (sortTypeStr == "Insertion")
+            sortType = SortType.Insertion;
+        else if (sortTypeStr == "Selection")
+            sortType = SortType.Selection;
+        else
+            sortType = SortType.Bubble;
 
         SpawnBalloons();
         StartCoroutine(InitializeSortAfterFrame());

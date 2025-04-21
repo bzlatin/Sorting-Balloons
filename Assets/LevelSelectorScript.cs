@@ -73,6 +73,7 @@ public class LevelSelectController : MonoBehaviour
         Debug.Log("StartSelectedLevel triggered");
 
         PlayerPrefs.SetString("SortType", levels[currentIndex].sortTypeKey);
+        PlayerPrefs.Save();
         SceneManager.LoadScene("InGame");
     }
 

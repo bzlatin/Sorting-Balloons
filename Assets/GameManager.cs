@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
 
     public BubbleSortController bubbleSortController;
     public InsertionSortController insertionSortController;
+    public SelectionSortController selectionSortController;
+
 
     private Dictionary<SortType, MonoBehaviour> sortControllers = new();
     private SortType activeSortType;
@@ -35,12 +37,23 @@ public class GameManager : MonoBehaviour
         sortControllers = new Dictionary<SortType, MonoBehaviour>
         {
             { SortType.Bubble, bubbleSortController },
-            { SortType.Insertion, insertionSortController }
+            { SortType.Insertion, insertionSortController },
+            { SortType.Selection, selectionSortController } 
+
         };
+
+
 
         // Determine selected sort type
         string type = PlayerPrefs.GetString("SortType", "Bubble");
-        activeSortType = type == "Insertion" ? SortType.Insertion : SortType.Bubble;
+
+        if (type == "Insertion")
+            activeSortType = SortType.Insertion;
+        else if (type == "Selection")
+            activeSortType = SortType.Selection;
+        else
+            activeSortType = SortType.Bubble;
+
 
         // Enable only the selected controller
         foreach (var kvp in sortControllers)
@@ -130,6 +143,8 @@ public class GameManager : MonoBehaviour
                 bubble.DisableInput();
             else if (controller is InsertionSortController insertion)
                 insertion.DisableInput();
+            else if (controller is SelectionSortController selection)
+                selection.DisableInput();
         }
 
         // Enable only active controller
@@ -167,7 +182,12 @@ public class GameManager : MonoBehaviour
             {
                 insertion.balloons = balloons;
                 insertion.Initialize();
+            } else if (controller is SelectionSortController selection)
+            {
+                selection.balloons = balloons;
+                selection.Initialize();
             }
+
         }
     }
 }
