@@ -8,8 +8,10 @@ public class LifeSystem : MonoBehaviour
 
     public int maxLives = 5;
     private int currentLives;
+
     public BubbleSortController bubbleSortController;
     public InsertionSortController insertionSortController;
+    public SelectionSortController selectionSortController; 
 
     public TextMeshProUGUI livesText;
     public TextMeshProUGUI statusText;
@@ -68,13 +70,13 @@ public class LifeSystem : MonoBehaviour
 
         if (gameOverPanel != null)
             gameOverPanel.SetActive(true);
-        
+
         bubbleSortController?.DisableInput();
         insertionSortController?.DisableInput();
+        selectionSortController?.DisableInput(); // Added
 
         Time.timeScale = 0f;
     }
-
 
     public void LoadMainMenu()
     {

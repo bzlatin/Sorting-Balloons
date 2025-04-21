@@ -2955,7 +2955,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   winPanel: {fileID: 136387915}
-  gameOverPanel: {fileID: 0}
+  gameOverPanel: {fileID: 1744340728}
   statusText: {fileID: 1001920534}
   timer: {fileID: 1731132456}
   lifeSystem: {fileID: 1980130894}
@@ -2963,6 +2963,7 @@ MonoBehaviour:
   balloonSpawner: {fileID: 1646592449}
   bubbleSortController: {fileID: 997017605}
   insertionSortController: {fileID: 860590624}
+  selectionSortController: {fileID: 1825071312}
 --- !u!4 &1280106723
 Transform:
   m_ObjectHideFlags: 0
@@ -3396,7 +3397,8 @@ MonoBehaviour:
   yPosition: 0
   bubbleSortController: {fileID: 997017605}
   insertionSortController: {fileID: 860590624}
-  sortType: 1
+  selectionSortController: {fileID: 1825071312}
+  sortType: 2
   gameManager: {fileID: 1280106722}
 --- !u!4 &1646592450
 Transform:
@@ -3755,6 +3757,53 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1825071311
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1825071313}
+  - component: {fileID: 1825071312}
+  m_Layer: 0
+  m_Name: SelectionSortController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1825071312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1825071311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf1dc4fbcac024d2ab069b24ce38e2f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  balloons: []
+  gameManager: {fileID: 1280106722}
+  markerPrefab: {fileID: 7625813813917012362, guid: b4a5801d94fe844c2a6bf4d356b00b43, type: 3}
+--- !u!4 &1825071313
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1825071311}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 407.92932, y: 727.62085, z: -8.519445}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1861810033
 GameObject:
   m_ObjectHideFlags: 0
@@ -4153,6 +4202,7 @@ MonoBehaviour:
   maxLives: 5
   bubbleSortController: {fileID: 997017605}
   insertionSortController: {fileID: 860590624}
+  selectionSortController: {fileID: 1825071312}
   livesText: {fileID: 505201553}
   statusText: {fileID: 1001920534}
   gameOverPanel: {fileID: 1744340728}
@@ -4784,3 +4834,4 @@ SceneRoots:
   - {fileID: 1280106723}
   - {fileID: 1862349686}
   - {fileID: 2975040609000342602}
+  - {fileID: 1825071313}
