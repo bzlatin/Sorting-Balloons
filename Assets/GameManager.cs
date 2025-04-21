@@ -6,6 +6,8 @@ using System.Collections.Generic;
 public class GameManager : MonoBehaviour
 {
     public GameObject winPanel;
+    public GameObject gameOverPanel;
+
     public TextMeshProUGUI statusText;
     public Timer timer;
     public LifeSystem lifeSystem;
@@ -57,13 +59,21 @@ public class GameManager : MonoBehaviour
             statusText.text = message;
     }
 
-    public void TogglePause()
+   public void TogglePause()
     {
+        if ((winPanel != null && winPanel.activeInHierarchy) ||
+            (gameOverPanel != null && gameOverPanel.activeInHierarchy))
+        {
+            Debug.Log("Pause disabled because win or game over panel is active.");
+            return;
+        }
+
         if (isPaused)
             ResumeGame();
         else
             PauseGame();
     }
+
 
     public void PauseGame()
     {
