@@ -58,9 +58,11 @@ public class BalloonSpawnerUI : MonoBehaviour
         {
             GameObject go = Instantiate(balloonPrefab, rightPanel);
             RectTransform rt = go.GetComponent<RectTransform>();
-            rt.anchoredPosition = new Vector2(i * spacing - offset, 0);
+            float rightMargin = 10f; // adjust as needed
+            rt.anchoredPosition = new Vector2(i * spacing - offset - rightMargin, 0);
 
-            TextMeshProUGUI label = go.GetComponentInChildren<TextMeshProUGUI>();
+
+            TextMeshProUGUI label = go.GetComponentInChildren<TextMeshProUGUI>(true);
             if (label != null) label.text = pool[i].ToString();
             else               Debug.LogError("UI balloon prefab missing TextMeshProUGUI!");
 

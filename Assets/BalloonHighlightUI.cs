@@ -28,4 +28,11 @@ public class BalloonHighlightUI : MonoBehaviour
         if (img != null && highlightSprite != null)
             img.sprite = highlightSprite;
     }
+
+    public void SetFinal()
+    {
+        if (img != null && highlightSprite != null)
+            img.sprite = highlightSprite;
+    }
+
 }

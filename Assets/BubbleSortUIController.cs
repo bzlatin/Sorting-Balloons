@@ -53,6 +53,7 @@ public class BubbleSortUIController : MonoBehaviour
         }
 
         ClearAllHighlights();
+        SetAllFinal(); // ✅ Mark all as sorted
 
         yield return new WaitForSeconds(restartDelay);
 
@@ -143,5 +144,14 @@ public class BubbleSortUIController : MonoBehaviour
     {
         foreach (var go in balloons)
             go.GetComponentInChildren<BalloonHighlightUI>()?.SetNormal();
+    }
+
+    private void SetAllFinal()
+    {
+        foreach (var go in balloons)
+        {
+            var h = go.GetComponentInChildren<BalloonHighlightUI>();
+            h?.SetHighlighted(); // ✅ Reuse highlight (green) for sorted state
+        }
     }
 }
