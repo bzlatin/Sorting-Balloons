@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
+
 public class GameManager : MonoBehaviour
 {
     public GameObject winPanel;
@@ -18,10 +19,13 @@ public class GameManager : MonoBehaviour
     public InsertionSortController insertionSortController;
     public SelectionSortController selectionSortController;
 
-
     private Dictionary<SortType, MonoBehaviour> sortControllers = new();
     private SortType activeSortType;
     private bool isPaused = false;
+
+
+
+
 
     void Start()
     {
@@ -116,6 +120,7 @@ public class GameManager : MonoBehaviour
     {
         UpdateStatus("Sorted!");
         ShowWinScreen();
+        PlayWinGameSound();
         Time.timeScale = 0f;
     }
 
@@ -190,4 +195,25 @@ public class GameManager : MonoBehaviour
 
         }
     }
+
+    public void PlayCorrectSwapSound()
+    {
+        UIAudioManager.Instance?.PlayCorrectSwap();
+    }
+
+    public void PlayWrongSwapSound()
+    {
+        UIAudioManager.Instance?.PlayWrongSwap();
+    }
+
+    public void PlayCorrectSkipSound()
+    {
+        UIAudioManager.Instance?.PlayCorrectSkip();
+    }
+
+    public void PlayWinGameSound()
+    {
+        UIAudioManager.Instance?.PlayWinSound();
+    }
+
 }

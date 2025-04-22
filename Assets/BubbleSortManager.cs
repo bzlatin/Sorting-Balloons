@@ -54,21 +54,27 @@ public class BubbleSortController : MonoBehaviour
             if (!attemptSwap)
             {
                 gameManager.OnPlayerMistake("You should have swapped!");
+                gameManager.PlayWrongSwapSound(); 
                 return;
             }
 
             Swap(index, index + 1);
+            gameManager.PlayCorrectSwapSound();
             gameManager.UpdateStatus($"Swapped {a} and {b}");
+
         }
         else
         {
             if (attemptSwap)
             {
                 gameManager.OnPlayerMistake("You shouldn't have swapped!");
+                gameManager.PlayWrongSwapSound(); 
+
                 return;
             }
 
             gameManager.UpdateStatus($"Correctly skipped {a} and {b}");
+            gameManager.PlayCorrectSkipSound();
         }
 
         index++;
