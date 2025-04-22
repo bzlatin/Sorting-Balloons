@@ -51,10 +51,13 @@ public class InsertionSortController : MonoBehaviour
             if (attemptSwap)
             {
                 gameManager.OnPlayerMistake("No need to swap!");
+                gameManager.PlayWrongSwapSound();
             }
             else
             {
                 gameManager.UpdateStatus($"Correctly skipped {GetValue(j)}");
+                gameManager.PlayCorrectSkipSound(); 
+
             }
 
             i++;
@@ -77,10 +80,13 @@ public class InsertionSortController : MonoBehaviour
             if (attemptSwap)
             {
                 gameManager.OnPlayerMistake("No need to swap!");
+                gameManager.PlayWrongSwapSound();
             }
             else
             {
                 gameManager.UpdateStatus($"Correctly skipped {GetValue(j)}");
+                gameManager.PlayCorrectSkipSound(); 
+
             }
 
             i++;
@@ -101,10 +107,12 @@ public class InsertionSortController : MonoBehaviour
         if (!attemptSwap)
         {
             gameManager.OnPlayerMistake("You should have swapped!");
+            gameManager.PlayWrongSwapSound(); 
             return;
         }
 
         Swap(j - 1, j);
+        gameManager.PlayCorrectSwapSound();
         j--; // keep j here so player keeps comparing left until done
         gameManager.UpdateStatus($"Swapped {GetValue(j)} and {GetValue(j + 1)}");
     }

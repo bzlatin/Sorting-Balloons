@@ -82,11 +82,13 @@ public class LevelSelectController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             CycleLeft();
+            UIAudioManager.Instance?.SwitchLevelButtonClick(); // 🔊 play sound
         }
 
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             CycleRight();
+            UIAudioManager.Instance?.SwitchLevelButtonClick(); // 🔊 play sound
         }
     }
     public void StartNextLevel()
@@ -108,6 +110,5 @@ public class LevelSelectController : MonoBehaviour
 
     SceneManager.LoadScene("InGame");
 }
-
 
 }

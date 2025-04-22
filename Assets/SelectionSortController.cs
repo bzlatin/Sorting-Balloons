@@ -59,18 +59,7 @@ public class SelectionSortController : MonoBehaviour
     void HandleAction(bool attemptMarkAsMin)
     {
         if (compareIndex >= balloons.Count)
-        {
-            // End of scan, do one swap
-            if (minIndex != currentIndex)
-            {
-                Swap(currentIndex, minIndex);
-            }
-            else
-            {
-                ProceedToNext();
-            }
-            return;
-        }
+            return; // Already processed the step, ignore extra input
 
         int currentVal = GetValue(compareIndex);
         int minVal = GetValue(minIndex);
@@ -80,44 +69,75 @@ public class SelectionSortController : MonoBehaviour
             if (!attemptMarkAsMin)
             {
                 gameManager.OnPlayerMistake("You missed a smaller value!");
+                gameManager.PlayWrongSwapSound();
                 return;
             }
 
             minIndex = compareIndex;
             gameManager.UpdateStatus($"Marked {currentVal} as new minimum");
+            gameManager.PlayCorrectSwapSound();
         }
         else
         {
             if (attemptMarkAsMin)
             {
                 gameManager.OnPlayerMistake("That's not the smallest value.");
+                gameManager.PlayWrongSwapSound();
                 return;
             }
 
             gameManager.UpdateStatus($"Skipped {currentVal}, still min is {minVal}");
+            gameManager.PlayCorrectSkipSound();
         }
 
         compareIndex++;
+
+        // Automatically finalize the round if we've scanned the full array
+        if (compareIndex == balloons.Count)
+        {
+            if (minIndex != currentIndex)
+            {
+                gameManager.UpdateStatus($"Auto-selected: Swapping {GetValue(currentIndex)} with {GetValue(minIndex)}");
+                Swap(currentIndex, minIndex);
+            }
+            else
+            {
+                gameManager.UpdateStatus($"{GetValue(minIndex)} is already in the correct position.");
+                gameManager.PlayCorrectSkipSound();
+                ProceedToNext();
+            }
+
+            return;
+        }
+
         UpdateHighlight();
         UpdateMarker();
     }
 
+
+
+
+
+
     void ProceedToNext()
     {
-        currentIndex++;
-        minIndex = currentIndex;
-        compareIndex = currentIndex + 1;
-
-        if (currentIndex >= balloons.Count - 1)
+        // If we're at the last index already, we're done sorting
+        if (currentIndex >= balloons.Count - 2)
         {
             HighlightAsWinners();
             isActive = false;
             gameManager.OnLevelComplete();
+            return;
         }
+
+        currentIndex++;
+        minIndex = currentIndex;
+        compareIndex = currentIndex + 1;
 
         UpdateHighlight();
         UpdateMarker();
     }
+
 
     void Swap(int i, int j)
     {
@@ -128,6 +148,7 @@ public class SelectionSortController : MonoBehaviour
     IEnumerator SwapVisuals(int i, int j)
     {
         isSwapping = true;
+        gameManager.PlayCorrectSwapSound();
 
         GameObject a = balloons[i];
         GameObject b = balloons[j];
