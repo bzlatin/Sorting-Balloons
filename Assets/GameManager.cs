@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
 
+
 public class GameManager : MonoBehaviour
 {
     public GameObject winPanel;
@@ -22,6 +23,8 @@ public class GameManager : MonoBehaviour
     private Dictionary<SortType, MonoBehaviour> sortControllers = new();
     private SortType activeSortType;
     private bool isPaused = false;
+    public TextMeshProUGUI algorithmNameText;
+
 
 
 
@@ -58,6 +61,19 @@ public class GameManager : MonoBehaviour
         else
             activeSortType = SortType.Bubble;
 
+        // Set the title text here
+        if (algorithmNameText != null)
+        {
+            algorithmNameText.text = type + " Sort";
+        }
+
+        if (type == "Insertion")
+            activeSortType = SortType.Insertion;
+        else if (type == "Selection")
+            activeSortType = SortType.Selection;
+        else
+            activeSortType = SortType.Bubble;
+
 
         // Enable only the selected controller
         foreach (var kvp in sortControllers)
@@ -66,8 +82,9 @@ public class GameManager : MonoBehaviour
             if (kvp.Value != null)
                 kvp.Value.gameObject.SetActive(isActive);
         }
+        
+        
 
-        // BalloonSpawner will call InitializeActiveSort after spawning
     }
 
     public void UpdateStatus(string message)
