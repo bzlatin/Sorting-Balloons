@@ -71,7 +71,7 @@ public class LevelSelectController : MonoBehaviour
     public void StartSelectedLevel()
     {
         Debug.Log("StartSelectedLevel triggered");
-
+        PlayerPrefs.SetInt("CurrentLevelIndex", currentIndex); // Save index
         PlayerPrefs.SetString("SortType", levels[currentIndex].sortTypeKey);
         PlayerPrefs.Save();
         SceneManager.LoadScene("InGame");
@@ -89,6 +89,25 @@ public class LevelSelectController : MonoBehaviour
             CycleRight();
         }
     }
+    public void StartNextLevel()
+{
+    Debug.Log("StartNextLevel triggered");
+
+    int nextIndex = PlayerPrefs.GetInt("CurrentLevelIndex", 0) + 1;
+
+    if (nextIndex >= levels.Count)
+    {
+        Debug.Log("No more levels. Returning to Main Menu or showing end screen.");
+        SceneManager.LoadScene("MainMenu"); // You can change this to "Credits" or a "Game Complete" screen
+        return;
+    }
+
+    PlayerPrefs.SetInt("CurrentLevelIndex", nextIndex);
+    PlayerPrefs.SetString("SortType", levels[nextIndex].sortTypeKey);
+    PlayerPrefs.Save();
+
+    SceneManager.LoadScene("InGame");
+}
 
 
 }
