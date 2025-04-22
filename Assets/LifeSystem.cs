@@ -17,6 +17,7 @@ public class LifeSystem : MonoBehaviour
     public TextMeshProUGUI statusText;
     public GameObject gameOverPanel;
 
+
     void Awake()
     {
         if (Instance == null)
@@ -71,6 +72,8 @@ public class LifeSystem : MonoBehaviour
         if (gameOverPanel != null)
             gameOverPanel.SetActive(true);
 
+        PlayLoseGameSound();
+
         bubbleSortController?.DisableInput();
         insertionSortController?.DisableInput();
         selectionSortController?.DisableInput(); // Added
@@ -81,5 +84,10 @@ public class LifeSystem : MonoBehaviour
     public void LoadMainMenu()
     {
         SceneManager.LoadScene("MainMenu");
+    }
+
+    public void PlayLoseGameSound()
+    {
+        UIAudioManager.Instance?.PlayLoseWinSound();
     }
 }

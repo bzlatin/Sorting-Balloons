@@ -428,6 +428,7 @@ MonoBehaviour:
   wrongSwapClip: {fileID: 8300000, guid: ae94e7b5451b14a7ea8fcceda95c9831, type: 3}
   correctSkipClip: {fileID: 8300000, guid: 6412372d7aafe4f47ae504df652ee1a4, type: 3}
   winGameClip: {fileID: 8300000, guid: a0eafc15375f2403fb6a6aecdf9d415d, type: 3}
+  loseGameClip: {fileID: 8300000, guid: 1a112fdd693b142b69d0051cb50ed7cf, type: 3}
 --- !u!82 &454196710
 AudioSource:
   m_ObjectHideFlags: 0

@@ -15,6 +15,8 @@ public class UIAudioManager : MonoBehaviour
     public AudioClip wrongSwapClip;
     public AudioClip correctSkipClip;
     public AudioClip winGameClip;
+    public AudioClip loseGameClip;
+
 
     void Awake()
     {
@@ -84,5 +86,10 @@ public class UIAudioManager : MonoBehaviour
     {
         if (audioSource && winGameClip)
             audioSource.PlayOneShot(winGameClip);
+    }
+    public void PlayLoseWinSound()
+    {
+        if (audioSource && loseGameClip)
+            audioSource.PlayOneShot(loseGameClip);
     }
 }
