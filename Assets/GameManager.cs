@@ -3,7 +3,6 @@ using TMPro;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
-
 public class GameManager : MonoBehaviour
 {
     public GameObject winPanel;
@@ -18,14 +17,11 @@ public class GameManager : MonoBehaviour
     public BubbleSortController bubbleSortController;
     public InsertionSortController insertionSortController;
     public SelectionSortController selectionSortController;
+    public MergeSortController mergeSortController; // 🔧 NEW
 
     private Dictionary<SortType, MonoBehaviour> sortControllers = new();
     private SortType activeSortType;
     private bool isPaused = false;
-
-
-
-
 
     void Start()
     {
@@ -42,11 +38,9 @@ public class GameManager : MonoBehaviour
         {
             { SortType.Bubble, bubbleSortController },
             { SortType.Insertion, insertionSortController },
-            { SortType.Selection, selectionSortController } 
-
+            { SortType.Selection, selectionSortController },
+            { SortType.Merge, mergeSortController } // 🔧 NEW
         };
-
-
 
         // Determine selected sort type
         string type = PlayerPrefs.GetString("SortType", "Bubble");
@@ -55,9 +49,10 @@ public class GameManager : MonoBehaviour
             activeSortType = SortType.Insertion;
         else if (type == "Selection")
             activeSortType = SortType.Selection;
+        else if (type == "Merge")
+            activeSortType = SortType.Merge; // 🔧 NEW
         else
             activeSortType = SortType.Bubble;
-
 
         // Enable only the selected controller
         foreach (var kvp in sortControllers)
@@ -76,7 +71,7 @@ public class GameManager : MonoBehaviour
             statusText.text = message;
     }
 
-   public void TogglePause()
+    public void TogglePause()
     {
         if ((winPanel != null && winPanel.activeInHierarchy) ||
             (gameOverPanel != null && gameOverPanel.activeInHierarchy))
@@ -91,12 +86,10 @@ public class GameManager : MonoBehaviour
             PauseGame();
     }
 
-
     public void PauseGame()
     {
         isPaused = true;
         Time.timeScale = 0f;
-
         if (pausePanel != null)
             pausePanel.SetActive(true);
     }
@@ -105,7 +98,6 @@ public class GameManager : MonoBehaviour
     {
         isPaused = false;
         Time.timeScale = 1f;
-
         if (pausePanel != null)
             pausePanel.SetActive(false);
     }
@@ -150,6 +142,8 @@ public class GameManager : MonoBehaviour
                 insertion.DisableInput();
             else if (controller is SelectionSortController selection)
                 selection.DisableInput();
+            else if (controller is MergeSortController merge)
+                merge.DisableInput(); // 🔧 NEW
         }
 
         // Enable only active controller
@@ -164,7 +158,6 @@ public class GameManager : MonoBehaviour
         timer?.ResetTimer();
         lifeSystem?.ResetLives();
 
-        // BalloonSpawner will call InitializeActiveSort when it's done
         balloonSpawner?.ResetSpawner();
     }
 
@@ -187,33 +180,22 @@ public class GameManager : MonoBehaviour
             {
                 insertion.balloons = balloons;
                 insertion.Initialize();
-            } else if (controller is SelectionSortController selection)
+            }
+            else if (controller is SelectionSortController selection)
             {
                 selection.balloons = balloons;
                 selection.Initialize();
             }
-
+            else if (controller is MergeSortController merge) // 🔧 NEW
+            {
+                merge.balloons = balloons;
+                merge.Initialize();
+            }
         }
     }
 
-    public void PlayCorrectSwapSound()
-    {
-        UIAudioManager.Instance?.PlayCorrectSwap();
-    }
-
-    public void PlayWrongSwapSound()
-    {
-        UIAudioManager.Instance?.PlayWrongSwap();
-    }
-
-    public void PlayCorrectSkipSound()
-    {
-        UIAudioManager.Instance?.PlayCorrectSkip();
-    }
-
-    public void PlayWinGameSound()
-    {
-        UIAudioManager.Instance?.PlayWinSound();
-    }
-
+    public void PlayCorrectSwapSound() => UIAudioManager.Instance?.PlayCorrectSwap();
+    public void PlayWrongSwapSound() => UIAudioManager.Instance?.PlayWrongSwap();
+    public void PlayCorrectSkipSound() => UIAudioManager.Instance?.PlayCorrectSkip();
+    public void PlayWinGameSound() => UIAudioManager.Instance?.PlayWinSound();
 }
