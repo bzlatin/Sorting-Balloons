@@ -5,19 +5,25 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("UI Panels")]
     public GameObject winPanel;
     public GameObject gameOverPanel;
+    public GameObject pausePanel;
 
+    [Header("UI Texts")]
     public TextMeshProUGUI statusText;
+    public TextMeshProUGUI instructionsText;   // 🔧 New field
+
+    [Header("Gameplay")]
     public Timer timer;
     public LifeSystem lifeSystem;
-    public GameObject pausePanel;
     public BalloonSpawner balloonSpawner;
 
+    [Header("Sort Controllers")]
     public BubbleSortController bubbleSortController;
     public InsertionSortController insertionSortController;
     public SelectionSortController selectionSortController;
-    public MergeSortController mergeSortController; // 🔧 NEW
+    public MergeSortController mergeSortController;
 
     private Dictionary<SortType, MonoBehaviour> sortControllers = new();
     private SortType activeSortType;
@@ -27,42 +33,43 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         isPaused = false;
-
-        if (pausePanel != null)
-            pausePanel.SetActive(false);
-
+        if (pausePanel != null) pausePanel.SetActive(false);
         EventSystem.current.SetSelectedGameObject(null);
 
-        // Map available sort controllers
+        // 1) Map controllers
         sortControllers = new Dictionary<SortType, MonoBehaviour>
         {
             { SortType.Bubble, bubbleSortController },
             { SortType.Insertion, insertionSortController },
             { SortType.Selection, selectionSortController },
-            { SortType.Merge, mergeSortController } // 🔧 NEW
+            { SortType.Merge, mergeSortController }
         };
 
-        // Determine selected sort type
+        // 2) Pick the active sort
         string type = PlayerPrefs.GetString("SortType", "Bubble");
+        if      (type == "Insertion") activeSortType = SortType.Insertion;
+        else if (type == "Selection") activeSortType = SortType.Selection;
+        else if (type == "Merge")     activeSortType = SortType.Merge;
+        else                           activeSortType = SortType.Bubble;
 
-        if (type == "Insertion")
-            activeSortType = SortType.Insertion;
-        else if (type == "Selection")
-            activeSortType = SortType.Selection;
-        else if (type == "Merge")
-            activeSortType = SortType.Merge; // 🔧 NEW
-        else
-            activeSortType = SortType.Bubble;
-
-        // Enable only the selected controller
+        // 3) Enable only that controller
         foreach (var kvp in sortControllers)
         {
-            bool isActive = kvp.Key == activeSortType;
             if (kvp.Value != null)
-                kvp.Value.gameObject.SetActive(isActive);
+                kvp.Value.gameObject.SetActive(kvp.Key == activeSortType);
         }
 
-        // BalloonSpawner will call InitializeActiveSort after spawning
+        // 4) Update the instructions panel
+        if (activeSortType == SortType.Merge && instructionsText != null)
+        {
+            // manual line-breaks to guarantee fit
+            instructionsText.text =
+                "Press the ARROW KEY corresponding to the side\n" +
+                "that the smaller highlighted element is on\n" +
+                "or the non-exhausted side.";
+        }
+
+        // 5) Wait for spawner to call InitializeActiveSort()
     }
 
     public void UpdateStatus(string message)
@@ -75,31 +82,24 @@ public class GameManager : MonoBehaviour
     {
         if ((winPanel != null && winPanel.activeInHierarchy) ||
             (gameOverPanel != null && gameOverPanel.activeInHierarchy))
-        {
-            Debug.Log("Pause disabled because win or game over panel is active.");
             return;
-        }
 
-        if (isPaused)
-            ResumeGame();
-        else
-            PauseGame();
+        if (isPaused) ResumeGame();
+        else          PauseGame();
     }
 
-    public void PauseGame()
+    void PauseGame()
     {
         isPaused = true;
         Time.timeScale = 0f;
-        if (pausePanel != null)
-            pausePanel.SetActive(true);
+        if (pausePanel != null) pausePanel.SetActive(true);
     }
 
-    public void ResumeGame()
+    void ResumeGame()
     {
         isPaused = false;
         Time.timeScale = 1f;
-        if (pausePanel != null)
-            pausePanel.SetActive(false);
+        if (pausePanel != null) pausePanel.SetActive(false);
     }
 
     public void OnPlayerMistake(string message)
@@ -118,7 +118,6 @@ public class GameManager : MonoBehaviour
 
     public void ShowWinScreen()
     {
-        Debug.Log("Showing win screen!");
         if (winPanel != null)
             winPanel.SetActive(true);
     }
@@ -127,75 +126,53 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         isPaused = false;
-
-        if (pausePanel != null) pausePanel.SetActive(false);
-        if (winPanel != null) winPanel.SetActive(false);
-
+        if (pausePanel != null)     pausePanel.SetActive(false);
+        if (winPanel != null)       winPanel.SetActive(false);
         UpdateStatus("");
 
         // Disable all controllers
-        foreach (var controller in sortControllers.Values)
+        foreach (var c in sortControllers.Values)
         {
-            if (controller is BubbleSortController bubble)
-                bubble.DisableInput();
-            else if (controller is InsertionSortController insertion)
-                insertion.DisableInput();
-            else if (controller is SelectionSortController selection)
-                selection.DisableInput();
-            else if (controller is MergeSortController merge)
-                merge.DisableInput(); // 🔧 NEW
+            if (c is BubbleSortController b) b.DisableInput();
+            if (c is InsertionSortController ins) ins.DisableInput();
+            if (c is SelectionSortController sel) sel.DisableInput();
+            if (c is MergeSortController m) m.DisableInput();
         }
 
-        // Enable only active controller
+        // Re‐enable only the active one
         foreach (var kvp in sortControllers)
         {
-            bool isActive = kvp.Key == activeSortType;
             if (kvp.Value != null)
-                kvp.Value.gameObject.SetActive(isActive);
+                kvp.Value.gameObject.SetActive(kvp.Key == activeSortType);
         }
 
         StopAllCoroutines();
         timer?.ResetTimer();
         lifeSystem?.ResetLives();
-
         balloonSpawner?.ResetSpawner();
     }
 
     public void InitializeActiveSort(List<GameObject> balloons)
     {
-        if (sortControllers.TryGetValue(activeSortType, out var controller))
-        {
-            if (controller == null || !controller.gameObject.activeInHierarchy)
-            {
-                Debug.LogWarning($"Sort controller for {activeSortType} is not active. Skipping init.");
-                return;
-            }
+        if (!sortControllers.TryGetValue(activeSortType, out var controller) ||
+            controller == null || !controller.gameObject.activeInHierarchy)
+            return;
 
-            if (controller is BubbleSortController bubble)
-            {
-                bubble.balloons = balloons;
-                bubble.Initialize();
-            }
-            else if (controller is InsertionSortController insertion)
-            {
-                insertion.balloons = balloons;
-                insertion.Initialize();
-            }
-            else if (controller is SelectionSortController selection)
-            {
-                selection.balloons = balloons;
-                selection.Initialize();
-            }
-            else if (controller is MergeSortController merge) // 🔧 NEW
-            {
-                merge.balloons = balloons;
-                merge.Initialize();
-            }
+        switch (controller)
+        {
+            case BubbleSortController b:
+                b.balloons = balloons; b.Initialize(); break;
+            case InsertionSortController ins:
+                ins.balloons = balloons; ins.Initialize(); break;
+            case SelectionSortController sel:
+                sel.balloons = balloons; sel.Initialize(); break;
+            case MergeSortController m:
+                m.balloons = balloons; m.Initialize(); break;
         }
     }
 
     public void PlayCorrectSwapSound() => UIAudioManager.Instance?.PlayCorrectSwap();
-    public void PlayWrongSwapSound() => UIAudioManager.Instance?.PlayWrongSwap();
+    public void PlayWrongSwapSound()   => UIAudioManager.Instance?.PlayWrongSwap();
     public void PlayCorrectSkipSound() => UIAudioManager.Instance?.PlayCorrectSkip();
-    public void PlayWinGameSound() => UIAudioManager.Instance?.PlayWinSound();
+    public void PlayWinGameSound()     => UIAudioManager.Instance?.PlayWinSound();
 }

@@ -9,10 +9,7 @@ public class MergeSortController : MonoBehaviour
     public GameManager gameManager;
 
     private bool isActive = false;
-
-    private int groupSize;
-    private int mergeGroupStart;
-    private int leftIndex, rightIndex;
+    private int groupSize, mergeGroupStart, leftIndex, rightIndex;
     private List<GameObject> mergeBuffer;
     private Vector3[] targetPositions;
 
@@ -24,8 +21,8 @@ public class MergeSortController : MonoBehaviour
             return;
         }
 
-        isActive       = false;               // lock input until first message
-        mergeBuffer    = new List<GameObject>();
+        isActive        = false;
+        mergeBuffer     = new List<GameObject>();
         targetPositions = new Vector3[balloons.Count];
         for (int i = 0; i < balloons.Count; i++)
             targetPositions[i] = balloons[i].transform.position;
@@ -47,7 +44,6 @@ public class MergeSortController : MonoBehaviour
     void Update()
     {
         if (!isActive) return;
-
         if (Input.GetKeyDown(KeyCode.LeftArrow))  HandleUserPick(true);
         if (Input.GetKeyDown(KeyCode.RightArrow)) HandleUserPick(false);
     }
@@ -60,20 +56,25 @@ public class MergeSortController : MonoBehaviour
         GameObject left  = leftIndex  < mid ? balloons[leftIndex]  : null;
         GameObject right = rightIndex < end ? balloons[rightIndex] : null;
 
-        // auto-pick when one side is gone
+        // auto‐pick if one side is gone
         if (left == null && right != null)      pickLeft = false;
         else if (right == null && left != null) pickLeft = true;
 
-        // validate correct choice
+        // if both exist, validate correct pick
         if (left != null && right != null)
         {
             bool shouldPickLeft = GetValue(left) <= GetValue(right);
             if (pickLeft != shouldPickLeft)
             {
+                // wrong pick: play wrong‐swap sound and mistake logic
+                gameManager.PlayWrongSwapSound();
                 gameManager.OnPlayerMistake("Oops—that wasn't the smaller balloon.");
                 return;
             }
         }
+
+        // correct pick: play swap sound
+        gameManager.PlayCorrectSwapSound();
 
         // record pick
         GameObject chosen = pickLeft ? left : right;
@@ -96,7 +97,7 @@ public class MergeSortController : MonoBehaviour
         isActive = false;
         gameManager.UpdateStatus("Merging…");
 
-        // animate all picks into place
+        // animate each balloon sliding into place
         for (int i = 0; i < mergeBuffer.Count; i++)
         {
             var b     = mergeBuffer[i];
@@ -109,6 +110,9 @@ public class MergeSortController : MonoBehaviour
                 b.transform.position = Vector3.Lerp(start, end, t);
                 yield return null;
             }
+
+            // play a little sound for each balloon moving
+            gameManager.PlayCorrectSwapSound();
         }
 
         // write back
@@ -153,14 +157,11 @@ public class MergeSortController : MonoBehaviour
             var hl = balloons[i].GetComponent<BalloonHighlight>();
             if (hl == null) continue;
 
-            // dim everything outside current group
             if (i < mergeGroupStart || i >= groupEnd)
                 hl.SetDimmed();
             else
             {
-                // normal for in-group
                 hl.SetNormal();
-                // highlight the two under comparison
                 if (i == leftIndex || i == rightIndex)
                     hl.SetHighlighted();
             }

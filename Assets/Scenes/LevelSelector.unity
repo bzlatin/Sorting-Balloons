@@ -870,6 +870,7 @@ MonoBehaviour:
   leftArrow: {fileID: 632263417}
   rightArrow: {fileID: 1990481165}
   startButtonText: {fileID: 800606509}
+  instructionsText: {fileID: 41418275}
   levels:
   - levelName: Bubble Sort
     sortTypeKey: Bubble

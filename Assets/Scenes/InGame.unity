@@ -3091,10 +3091,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   winPanel: {fileID: 136387915}
   gameOverPanel: {fileID: 1744340728}
+  pausePanel: {fileID: 190200515}
   statusText: {fileID: 1001920534}
+  instructionsText: {fileID: 791126811}
   timer: {fileID: 1731132456}
   lifeSystem: {fileID: 1980130894}
-  pausePanel: {fileID: 190200515}
   balloonSpawner: {fileID: 1646592449}
   bubbleSortController: {fileID: 997017605}
   insertionSortController: {fileID: 860590624}
