@@ -2,12 +2,12 @@ using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
 
-public class BalloonSpawnerUI : MonoBehaviour
+public class BallonSpawnerUI_Insertion : MonoBehaviour
 {
     [Header("UI References")]
     public RectTransform        rightPanel;      // drag your RightPanel here
     public GameObject           balloonPrefab;   // UI‑balloon prefab (Image + TMPUGUI)
-    public BubbleSortUIController sortController;
+    public InsertionSortUIController sortController;
    
 
     [Header("Spawner Settings")]
