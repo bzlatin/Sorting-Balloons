@@ -42,6 +42,7 @@ public class InsertionSortUIController : MonoBehaviour
 
     private IEnumerator AutoSortLoop()
     {
+        yield return new WaitForSeconds(restartDelay); 
         yield return new WaitForSeconds(stepInterval);
 
         while (outer < balloons.Count)

@@ -47,6 +47,7 @@ public class SelectionSortUIController : MonoBehaviour
     #region Main loop
     private IEnumerator AutoSortLoop()
     {
+        yield return new WaitForSeconds(restartDelay); 
         yield return new WaitForSeconds(stepInterval);
 
         while (outer < balloons.Count - 1)
@@ -69,7 +70,7 @@ public class SelectionSortUIController : MonoBehaviour
 
     private void StepAutomatic()
     {
-        /* 1️⃣  Scan the unsorted tail, updating current min */
+
         if (scan < balloons.Count)
         {
             int valScan = GetValue(scan);
