@@ -4,34 +4,37 @@ using UnityEngine;
 using TMPro;
 
 
-public class InsertionSortUIController : MonoBehaviour
+public class SelectionSortUIController : MonoBehaviour
 {
-    [HideInInspector] public List<GameObject> balloons;   // set by spawner
+    [HideInInspector] public List<GameObject> balloons;
 
     [Header("References")]
-    public BallonSpawnerUI_Insertion spawner;
+    public BallonSpawnerUI_Selection spawner;
 
     [Header("Animation")]
-    public float stepInterval = 1.5f;
+    public float stepInterval = 1.5f;   
 
     [Header("Cycle")]
     public float restartDelay = 2f;
 
-    private int outer;        // index being inserted
-    private int inner;        // scans left
-    private bool isSwapping;  // true while swap coroutine runs
+    private int  outer;        
+    private int  scan;         
+    private int  minIndex;    
+    private bool isSwapping;
     private Coroutine autoRoutine;
 
+    #region Public API
     public void Initialize()
     {
         if (balloons == null || balloons.Count < 2)
         {
-            Debug.LogError("InsertionSortUIController: balloon list null or too small.");
+            Debug.LogError("SelectionSortUIController: balloon list null or too small.");
             return;
         }
 
-        outer      = 1;
-        inner      = outer;
+        outer      = 0;
+        scan       = outer + 1;
+        minIndex   = outer;
         isSwapping = false;
 
         UpdateHighlight();
@@ -39,12 +42,14 @@ public class InsertionSortUIController : MonoBehaviour
         if (autoRoutine != null) StopCoroutine(autoRoutine);
         autoRoutine = StartCoroutine(AutoSortLoop());
     }
+    #endregion
 
+    #region Main loop
     private IEnumerator AutoSortLoop()
     {
         yield return new WaitForSeconds(stepInterval);
 
-        while (outer < balloons.Count)
+        while (outer < balloons.Count - 1)
         {
             yield return new WaitUntil(() => !isSwapping);
 
@@ -58,29 +63,38 @@ public class InsertionSortUIController : MonoBehaviour
 
         yield return new WaitForSeconds(restartDelay);
 
-        if (spawner != null)
-            spawner.ResetSpawnerUI();
-        else
-            Debug.LogWarning("InsertionSortUIController: no spawner reference set.");
+        if (spawner != null) spawner.ResetSpawnerUI();
+        else                 Debug.LogWarning("SelectionSortUIController: no spawner set.");
     }
 
     private void StepAutomatic()
     {
-        if (inner > 0)
+        /* 1️⃣  Scan the unsorted tail, updating current min */
+        if (scan < balloons.Count)
         {
-            int left  = GetValue(inner - 1);
-            int right = GetValue(inner);
+            int valScan = GetValue(scan);
+            int valMin  = GetValue(minIndex);
 
-            if (left > right)
-            {
-                Swap(inner - 1, inner);
-                return;   // wait for swap coroutine
-            }
+            if (valScan < valMin) minIndex = scan;
+
+            scan++;
+            UpdateHighlight();
+            return;                         // continue scanning on next tick
         }
 
-        AdvanceOuter();
+        /* 2️⃣  Finished scanning – swap if needed, then advance outer */
+        if (minIndex != outer)
+        {
+            Swap(outer, minIndex);          // async; AdvanceOuter() after swap
+        }
+        else
+        {
+            AdvanceOuter();
+        }
     }
+    #endregion
 
+    #region Helpers
     private int GetValue(int i) =>
         int.Parse(balloons[i].GetComponentInChildren<TextMeshProUGUI>().text);
 
@@ -118,25 +132,22 @@ public class InsertionSortUIController : MonoBehaviour
 
         isSwapping = false;
 
-        inner--;
-        UpdateHighlight();
+        AdvanceOuter();                     // continue algorithm
     }
 
     private void AdvanceOuter()
     {
         outer++;
-        inner = outer;
+        scan     = outer + 1;
+        minIndex = outer;
         UpdateHighlight();
     }
 
     private void UpdateHighlight()
     {
-        if (outer >= balloons.Count) { ClearAllHighlights(); return; }
-
-        int left  = Mathf.Max(inner - 1, 0);
-        int right = Mathf.Clamp(inner, 0, balloons.Count - 1);
-
-        SetHighlighted(left, right);
+        // Highlight 'minIndex' (current best) and 'scan' (current candidate)
+        int partner = (scan < balloons.Count) ? scan : minIndex;
+        SetHighlighted(minIndex, partner);
     }
 
     private void SetHighlighted(int a, int b)
@@ -146,8 +157,8 @@ public class InsertionSortUIController : MonoBehaviour
             var h = balloons[k].GetComponentInChildren<BalloonHighlightUI>();
             if (h == null) continue;
 
-            if (k == a || k == b) h.SetHighlighted();
-            else                  h.SetNormal();
+            if (k == a || k == b) h.SetHighlighted();   // yellow
+            else                  h.SetNormal();        // neutral
         }
     }
 
@@ -162,4 +173,5 @@ public class InsertionSortUIController : MonoBehaviour
         foreach (var go in balloons)
             go.GetComponentInChildren<BalloonHighlightUI>()?.SetHighlighted();
     }
+    #endregion
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
 
-public class BalloonSpawnerUI : MonoBehaviour
+public class BalloonSpawnerUI_Bubble : MonoBehaviour
 {
     [Header("UI References")]
     public RectTransform        rightPanel;      // drag your RightPanel here
