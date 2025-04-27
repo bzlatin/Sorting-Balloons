@@ -3,34 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class BubbleSortUIController : MonoBehaviour
+
+public class InsertionSortUIController : MonoBehaviour
 {
-    [HideInInspector] public List<GameObject> balloons;
+    [HideInInspector] public List<GameObject> balloons;   // set by spawner
 
     [Header("References")]
-    public BalloonSpawnerUI_Bubble spawner;
+    public BallonSpawnerUI_Insertion spawner;
 
     [Header("Animation")]
-    public float stepInterval = 0.6f;
+    public float stepInterval = 1.5f;
 
     [Header("Cycle")]
-    public float restartDelay = 1.0f;
+    public float restartDelay = 2f;
 
-    private int index;
-    private int end;
-    private bool isSwapping;
+    private int outer;        // index being inserted
+    private int inner;        // scans left
+    private bool isSwapping;  // true while swap coroutine runs
     private Coroutine autoRoutine;
 
     public void Initialize()
     {
         if (balloons == null || balloons.Count < 2)
         {
-            Debug.LogError("BubbleSortUIController: balloon list null or too small.");
+            Debug.LogError("InsertionSortUIController: balloon list null or too small.");
             return;
         }
 
-        index = 0;
-        end = balloons.Count;
+        outer      = 1;
+        inner      = outer;
         isSwapping = false;
 
         UpdateHighlight();
@@ -41,9 +42,10 @@ public class BubbleSortUIController : MonoBehaviour
 
     private IEnumerator AutoSortLoop()
     {
+        yield return new WaitForSeconds(restartDelay); 
         yield return new WaitForSeconds(stepInterval);
 
-        while (end > 1)
+        while (outer < balloons.Count)
         {
             yield return new WaitUntil(() => !isSwapping);
 
@@ -53,27 +55,31 @@ public class BubbleSortUIController : MonoBehaviour
         }
 
         ClearAllHighlights();
-        SetAllFinal(); // ✅ Mark all as sorted
+        SetAllFinal();
 
         yield return new WaitForSeconds(restartDelay);
 
         if (spawner != null)
             spawner.ResetSpawnerUI();
         else
-            Debug.LogWarning("BubbleSortUIController: no spawner reference set.");
+            Debug.LogWarning("InsertionSortUIController: no spawner reference set.");
     }
 
     private void StepAutomatic()
     {
-        if (isSwapping || index + 1 >= end) return;
+        if (inner > 0)
+        {
+            int left  = GetValue(inner - 1);
+            int right = GetValue(inner);
 
-        int a = GetValue(index);
-        int b = GetValue(index + 1);
+            if (left > right)
+            {
+                Swap(inner - 1, inner);
+                return;   // wait for swap coroutine
+            }
+        }
 
-        if (a > b)
-            Swap(index, index + 1);
-        else
-            AdvanceIndices();
+        AdvanceOuter();
     }
 
     private int GetValue(int i) =>
@@ -112,21 +118,27 @@ public class BubbleSortUIController : MonoBehaviour
         (balloons[i], balloons[j]) = (balloons[j], balloons[i]);
 
         isSwapping = false;
-        AdvanceIndices();
-    }
 
-    private void AdvanceIndices()
-    {
-        index++;
-        if (index + 1 >= end)
-        {
-            index = 0;
-            end--;
-        }
+        inner--;
         UpdateHighlight();
     }
 
-    private void UpdateHighlight() => SetHighlighted(index, index + 1);
+    private void AdvanceOuter()
+    {
+        outer++;
+        inner = outer;
+        UpdateHighlight();
+    }
+
+    private void UpdateHighlight()
+    {
+        if (outer >= balloons.Count) { ClearAllHighlights(); return; }
+
+        int left  = Mathf.Max(inner - 1, 0);
+        int right = Mathf.Clamp(inner, 0, balloons.Count - 1);
+
+        SetHighlighted(left, right);
+    }
 
     private void SetHighlighted(int a, int b)
     {
@@ -149,9 +161,6 @@ public class BubbleSortUIController : MonoBehaviour
     private void SetAllFinal()
     {
         foreach (var go in balloons)
-        {
-            var h = go.GetComponentInChildren<BalloonHighlightUI>();
-            h?.SetHighlighted(); // ✅ Reuse highlight (green) for sorted state
-        }
+            go.GetComponentInChildren<BalloonHighlightUI>()?.SetHighlighted();
     }
 }

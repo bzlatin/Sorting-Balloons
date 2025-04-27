@@ -2,24 +2,23 @@ using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
 
-public class BalloonSpawnerUI : MonoBehaviour
+public class BallonSpawnerUI_Insertion : MonoBehaviour
 {
     [Header("UI References")]
     public RectTransform        rightPanel;      // drag your RightPanel here
     public GameObject           balloonPrefab;   // UI‑balloon prefab (Image + TMPUGUI)
-    public BubbleSortUIController sortController;
+    public InsertionSortUIController sortController;
+   
 
     [Header("Spawner Settings")]
     public int   numberOfBalloons = 10;
     public float spacing           = 100f;       // pixels between balloons
 
-    /* ───────────────────────────────────────── private ───────────────────────────────────────── */
+    
     private readonly List<GameObject> spawned = new();   // keeps track of current row
 
-    /* ───────────────────────────────────────── unity ─────────────────────────────────────────── */
     private void Start() => SpawnRow();
 
-    /* ───────────────────────────────────────── public ────────────────────────────────────────── */
     public void ResetSpawnerUI()
     {
         foreach (var b in spawned) Destroy(b);
@@ -27,7 +26,6 @@ public class BalloonSpawnerUI : MonoBehaviour
         SpawnRow();
     }
 
-    /* ───────────────────────────────────────── core logic ────────────────────────────────────── */
     private void SpawnRow()
     {
         /* 1. Build a shuffled pool of unique numbers 0‑20 */

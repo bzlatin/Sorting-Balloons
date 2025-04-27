@@ -3,34 +3,38 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class BubbleSortUIController : MonoBehaviour
+
+public class SelectionSortUIController : MonoBehaviour
 {
     [HideInInspector] public List<GameObject> balloons;
 
     [Header("References")]
-    public BalloonSpawnerUI_Bubble spawner;
+    public BallonSpawnerUI_Selection spawner;
 
     [Header("Animation")]
-    public float stepInterval = 0.6f;
+    public float stepInterval = 1.5f;   
 
     [Header("Cycle")]
-    public float restartDelay = 1.0f;
+    public float restartDelay = 2f;
 
-    private int index;
-    private int end;
+    private int  outer;        
+    private int  scan;         
+    private int  minIndex;    
     private bool isSwapping;
     private Coroutine autoRoutine;
 
+    #region Public API
     public void Initialize()
     {
         if (balloons == null || balloons.Count < 2)
         {
-            Debug.LogError("BubbleSortUIController: balloon list null or too small.");
+            Debug.LogError("SelectionSortUIController: balloon list null or too small.");
             return;
         }
 
-        index = 0;
-        end = balloons.Count;
+        outer      = 0;
+        scan       = outer + 1;
+        minIndex   = outer;
         isSwapping = false;
 
         UpdateHighlight();
@@ -38,12 +42,15 @@ public class BubbleSortUIController : MonoBehaviour
         if (autoRoutine != null) StopCoroutine(autoRoutine);
         autoRoutine = StartCoroutine(AutoSortLoop());
     }
+    #endregion
 
+    #region Main loop
     private IEnumerator AutoSortLoop()
     {
+        yield return new WaitForSeconds(restartDelay); 
         yield return new WaitForSeconds(stepInterval);
 
-        while (end > 1)
+        while (outer < balloons.Count - 1)
         {
             yield return new WaitUntil(() => !isSwapping);
 
@@ -53,29 +60,42 @@ public class BubbleSortUIController : MonoBehaviour
         }
 
         ClearAllHighlights();
-        SetAllFinal(); // ✅ Mark all as sorted
+        SetAllFinal();
 
         yield return new WaitForSeconds(restartDelay);
 
-        if (spawner != null)
-            spawner.ResetSpawnerUI();
-        else
-            Debug.LogWarning("BubbleSortUIController: no spawner reference set.");
+        if (spawner != null) spawner.ResetSpawnerUI();
+        else                 Debug.LogWarning("SelectionSortUIController: no spawner set.");
     }
 
     private void StepAutomatic()
     {
-        if (isSwapping || index + 1 >= end) return;
 
-        int a = GetValue(index);
-        int b = GetValue(index + 1);
+        if (scan < balloons.Count)
+        {
+            int valScan = GetValue(scan);
+            int valMin  = GetValue(minIndex);
 
-        if (a > b)
-            Swap(index, index + 1);
+            if (valScan < valMin) minIndex = scan;
+
+            scan++;
+            UpdateHighlight();
+            return;                         // continue scanning on next tick
+        }
+
+        /* 2️⃣  Finished scanning – swap if needed, then advance outer */
+        if (minIndex != outer)
+        {
+            Swap(outer, minIndex);          // async; AdvanceOuter() after swap
+        }
         else
-            AdvanceIndices();
+        {
+            AdvanceOuter();
+        }
     }
+    #endregion
 
+    #region Helpers
     private int GetValue(int i) =>
         int.Parse(balloons[i].GetComponentInChildren<TextMeshProUGUI>().text);
 
@@ -112,21 +132,24 @@ public class BubbleSortUIController : MonoBehaviour
         (balloons[i], balloons[j]) = (balloons[j], balloons[i]);
 
         isSwapping = false;
-        AdvanceIndices();
+
+        AdvanceOuter();                     // continue algorithm
     }
 
-    private void AdvanceIndices()
+    private void AdvanceOuter()
     {
-        index++;
-        if (index + 1 >= end)
-        {
-            index = 0;
-            end--;
-        }
+        outer++;
+        scan     = outer + 1;
+        minIndex = outer;
         UpdateHighlight();
     }
 
-    private void UpdateHighlight() => SetHighlighted(index, index + 1);
+    private void UpdateHighlight()
+    {
+        // Highlight 'minIndex' (current best) and 'scan' (current candidate)
+        int partner = (scan < balloons.Count) ? scan : minIndex;
+        SetHighlighted(minIndex, partner);
+    }
 
     private void SetHighlighted(int a, int b)
     {
@@ -135,8 +158,8 @@ public class BubbleSortUIController : MonoBehaviour
             var h = balloons[k].GetComponentInChildren<BalloonHighlightUI>();
             if (h == null) continue;
 
-            if (k == a || k == b) h.SetHighlighted();
-            else                  h.SetNormal();
+            if (k == a || k == b) h.SetHighlighted();   // yellow
+            else                  h.SetNormal();        // neutral
         }
     }
 
@@ -149,9 +172,7 @@ public class BubbleSortUIController : MonoBehaviour
     private void SetAllFinal()
     {
         foreach (var go in balloons)
-        {
-            var h = go.GetComponentInChildren<BalloonHighlightUI>();
-            h?.SetHighlighted(); // ✅ Reuse highlight (green) for sorted state
-        }
+            go.GetComponentInChildren<BalloonHighlightUI>()?.SetHighlighted();
     }
+    #endregion
 }
