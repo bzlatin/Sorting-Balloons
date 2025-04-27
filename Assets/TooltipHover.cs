@@ -1,19 +1,40 @@
 using UnityEngine;
+using TMPro;
 using UnityEngine.EventSystems;
 
-public class TooltipHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class InstructionsTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public GameObject tooltipPanel;
+    [SerializeField] private GameObject panel;       // your InstructionsPanel
+    [SerializeField] private TMP_Text instructions;  // existing instructions text
+    [SerializeField] private TMP_Text algoLabel;     // the new line for algorithm
 
-    public void OnPointerEnter(PointerEventData eventData)
+    public void OnPointerEnter(PointerEventData e)
     {
-        if (tooltipPanel != null)
-            tooltipPanel.SetActive(true);
+        panel.SetActive(true);
+
+        string sortKey = PlayerPrefs.GetString("SortType", "");
+        string pretty;
+
+        if (string.IsNullOrEmpty(sortKey))
+        {
+            pretty = "Unknown";
+        }
+        else if (sortKey.EndsWith("Sort"))
+        {
+            // take everything before "Sort" and add a space + "Sort"
+            pretty = sortKey.Substring(0, sortKey.Length - 4) + " Sort";
+        }
+        else
+        {
+            // fallback: just show the raw key
+            pretty = sortKey;
+        }
+
+        algoLabel.text = $"<b>Current Algorithm:</b> {pretty}";
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    public void OnPointerExit(PointerEventData e)
     {
-        if (tooltipPanel != null)
-            tooltipPanel.SetActive(false);
+        panel.SetActive(false);
     }
 }
