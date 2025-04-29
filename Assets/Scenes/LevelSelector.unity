@@ -653,6 +653,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b81dc773ea9c50243bb62b222bc254af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  backgroundImage: {fileID: 1250127776}
+  bubbleSprite: {fileID: 3586536400968017784, guid: b5d478a8743fb2a40afcdc59679ed902, type: 3}
+  insertionSprite: {fileID: 0}
+  selectionSprite: {fileID: 0}
   startButton: {fileID: 1063814117}
   leftArrow: {fileID: 632263417}
   rightArrow: {fileID: 1990481165}
@@ -2501,6 +2505,17 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1250127776 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4983619130958335808, guid: 499affbb960174ffb8a7ab6eb8e442bd, type: 3}
+  m_PrefabInstance: {fileID: 620497815}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1264496581
 GameObject:
   m_ObjectHideFlags: 0

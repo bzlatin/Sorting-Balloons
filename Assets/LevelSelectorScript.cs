@@ -8,6 +8,11 @@ using System.Collections.Generic;
 public class LevelSelectController : MonoBehaviour
 {
     [Header("UI References")]
+    [Header("Background")]
+    public Image backgroundImage;
+    public Sprite bubbleSprite;
+    public Sprite insertionSprite;
+    public Sprite selectionSprite;
     public Button startButton;
     public Button leftArrow;
     public Button rightArrow;
@@ -64,8 +69,29 @@ public class LevelSelectController : MonoBehaviour
         }
 
 
-        if (startButtonText != null)
+        if (startButtonText != null){
             startButtonText.text = "Start " + levels[index].levelName;
+        }
+        if (backgroundImage != null){
+            string key = levels[index].sortTypeKey;
+
+            switch (key)
+            {
+                case "Bubble":
+                    backgroundImage.sprite = bubbleSprite;
+                    break;
+                case "Insertion":
+                    backgroundImage.sprite = insertionSprite;
+                    break;
+                case "Selection":
+                    backgroundImage.sprite = selectionSprite;
+                    break;
+                default:
+                    Debug.LogWarning("No matching background for sortType: " + key);
+                    break;
+            }
+        }
+        
     }
 
     public void StartSelectedLevel()
