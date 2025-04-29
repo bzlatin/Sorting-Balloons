@@ -867,9 +867,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   backgroundImage: {fileID: 1250127776}
-  bubbleSprite: {fileID: 3586536400968017784, guid: b5d478a8743fb2a40afcdc59679ed902, type: 3}
-  insertionSprite: {fileID: 0}
-  selectionSprite: {fileID: 0}
+  bubbleSprite: {fileID: -6179217043664234106, guid: 5a7e034867695f04280cc5bf74462670, type: 3}
+  insertionSprite: {fileID: 2459180711757234080, guid: a851ba7e9a8042242a0594f44a535f18, type: 3}
+  selectionSprite: {fileID: 1778962826666946234, guid: 9ef0cad36841bc247820bfaca67c486e, type: 3}
+  MergeSprite: {fileID: -2380247601681082050, guid: df5d9a5fde436ec4daf434012f10b710, type: 3}
   startButton: {fileID: 1063814117}
   leftArrow: {fileID: 632263417}
   rightArrow: {fileID: 1990481165}

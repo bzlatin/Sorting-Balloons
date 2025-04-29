@@ -1,10 +1,11 @@
 fileFormatVersion: 2
-guid: b5d478a8743fb2a40afcdc59679ed902
+guid: 5a7e034867695f04280cc5bf74462670
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3586536400968017784
-    second: InsertionBackground_0
+      213: -6179217043664234106
+    second: 20250429_1731_Colorful Game Background_simple_compose_01jt1qarckeaebe2gxykrvssdy
+      (1)_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +101,8 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: InsertionBackground_0
+      name: 20250429_1731_Colorful Game Background_simple_compose_01jt1qarckeaebe2gxykrvssdy
+        (1)_0
       rect:
         serializedVersion: 2
         x: 0
@@ -115,8 +117,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 877e4b9badfe5c130800000000000000
-      internalID: 3586536400968017784
+      spriteID: 6899a5276d20f3aa0800000000000000
+      internalID: -6179217043664234106
       vertices: []
       indices: 
       edges: []
@@ -134,7 +136,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      20250429_1731_Colorful Game Background_simple_compose_01jt1qarckeaebe2gxykrvssdy (1)_0: -6179217043664234106
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

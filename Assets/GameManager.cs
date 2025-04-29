@@ -7,6 +7,8 @@ using System.Collections.Generic;
 public class GameManager : MonoBehaviour
 {
     [Header("UI Panels")]
+    public TextMeshProUGUI algorithmTitleText;
+
     public GameObject winPanel;
     public GameObject gameOverPanel;
     public GameObject pausePanel;
@@ -36,6 +38,12 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        string type = PlayerPrefs.GetString("SortType", "Bubble");
+        if (algorithmTitleText != null)
+        {
+            string formatted = char.ToUpper(type[0]) + type.Substring(1).ToLower();
+            algorithmTitleText.text = formatted + " Sort";
+        }
         Time.timeScale = 1f;
         isPaused = false;
         if (pausePanel != null) pausePanel.SetActive(false);
@@ -51,8 +59,6 @@ public class GameManager : MonoBehaviour
         };
 
         // 2) Pick the active sort
-        string type = PlayerPrefs.GetString("SortType", "Bubble");
-
         if (type == "Insertion")
             activeSortType = SortType.Insertion;
         else if (type == "Selection")

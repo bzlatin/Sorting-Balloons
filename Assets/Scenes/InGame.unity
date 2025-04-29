@@ -3220,6 +3220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c918c3f539cb4406292496216c79a2a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  algorithmTitleText: {fileID: 1844561987}
   winPanel: {fileID: 136387915}
   gameOverPanel: {fileID: 1744340728}
   pausePanel: {fileID: 190200515}
@@ -3232,7 +3233,6 @@ MonoBehaviour:
   insertionSortController: {fileID: 860590624}
   selectionSortController: {fileID: 1825071312}
   mergeSortController: {fileID: 2137968830}
-  algorithmNameText: {fileID: 1844561987}
 --- !u!4 &1280106723
 Transform:
   m_ObjectHideFlags: 0
@@ -4086,6 +4086,7 @@ RectTransform:
   - {fileID: 1186486310}
   - {fileID: 1861810034}
   - {fileID: 1844561986}
+  - {fileID: 33390866}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
