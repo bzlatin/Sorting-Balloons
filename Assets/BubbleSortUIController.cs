@@ -8,7 +8,7 @@ public class BubbleSortUIController : MonoBehaviour
     [HideInInspector] public List<GameObject> balloons;
 
     [Header("References")]
-    public BalloonSpawnerUI spawner;
+    public BalloonSpawnerUI_Bubble spawner;
 
     [Header("Animation")]
     public float stepInterval = 0.6f;

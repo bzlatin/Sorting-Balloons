@@ -4,7 +4,6 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 
-
 public class LevelSelectController : MonoBehaviour
 {
     [Header("UI References")]
@@ -16,41 +15,43 @@ public class LevelSelectController : MonoBehaviour
     public Button startButton;
     public Button leftArrow;
     public Button rightArrow;
-    public TMP_Text startButtonText;        // Optional button label override
+    public TMP_Text startButtonText;        
+
+    [Header("Instructions Panel")]
+    public TextMeshProUGUI instructionsText; // Drag your panel’s TMP here
 
     [Header("Levels")]
-    public List<SortingLevel> levels = new();
+    public List<SortingLevel> levels = new(); // Each has .panel and .sortTypeKey
 
     private int currentIndex = 0;
+    private SortType activeSortType;           
+    private string defaultInstructions;        
 
     void Start()
     {
         SetupButtons();
 
+        // Remember whatever you typed into the Inspector
+        if (instructionsText != null)
+            defaultInstructions = instructionsText.text;
+
         // Optional: reset previous selection
         PlayerPrefs.DeleteKey("SortType");
 
-        // Set default view
+        // Show the first level
         ShowLevel(0);
     }
 
     void SetupButtons()
     {
-
-        if (startButton == null) Debug.LogError("Start Button not assigned!");
-        if (leftArrow == null) Debug.LogError("Left Arrow not assigned!");
-        if (rightArrow == null) Debug.LogError("Right Arrow not assigned!");
+        if (startButton == null)      Debug.LogError("Start Button not assigned!");
+        if (leftArrow == null)        Debug.LogError("Left Arrow not assigned!");
+        if (rightArrow == null)       Debug.LogError("Right Arrow not assigned!");
+        if (instructionsText == null) Debug.LogError("Instructions Text not assigned!");
     }
 
-    public void CycleLeft()
-    {
-        Cycle(-1);
-    }
-
-    public void CycleRight()
-    {
-        Cycle(1);
-    }
+    public void CycleLeft()  => Cycle(-1);
+    public void CycleRight() => Cycle(1);
 
     void Cycle(int direction)
     {
@@ -63,12 +64,11 @@ public class LevelSelectController : MonoBehaviour
 
     void ShowLevel(int index)
     {
+        // 1) Activate only this panel
         for (int i = 0; i < levels.Count; i++)
-        {
             levels[i].panel.SetActive(i == index);
-        }
 
-
+        // 2) Set the Start button label
         if (startButtonText != null){
             startButtonText.text = "Start " + levels[index].levelName;
         }
@@ -92,12 +92,32 @@ public class LevelSelectController : MonoBehaviour
             }
         }
         
+
+        // 3) Figure out its SortType
+        string key = levels[index].sortTypeKey;
+        if      (key == "Insertion") activeSortType = SortType.Insertion;
+        else if (key == "Selection") activeSortType = SortType.Selection;
+        else if (key == "Merge")     activeSortType = SortType.Merge;
+        else                          activeSortType = SortType.Bubble;
+
+        // 4) Override instructions only for Merge
+        if (activeSortType == SortType.Merge)
+        {
+            instructionsText.text =
+                "Press the ARROW KEY corresponding to the side\n" +
+                "that the smaller highlighted element is on\n" +
+                "or the non-exhausted side.";
+        }
+        else
+        {
+            // Restore whatever you set up in the Inspector
+            instructionsText.text = defaultInstructions;
+        }
     }
 
     public void StartSelectedLevel()
     {
-        Debug.Log("StartSelectedLevel triggered");
-        PlayerPrefs.SetInt("CurrentLevelIndex", currentIndex); // Save index
+        PlayerPrefs.SetInt("CurrentLevelIndex", currentIndex);
         PlayerPrefs.SetString("SortType", levels[currentIndex].sortTypeKey);
         PlayerPrefs.Save();
         SceneManager.LoadScene("InGame");
@@ -108,33 +128,26 @@ public class LevelSelectController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             CycleLeft();
-            UIAudioManager.Instance?.SwitchLevelButtonClick(); // 🔊 play sound
+            UIAudioManager.Instance?.SwitchLevelButtonClick();
         }
-
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             CycleRight();
-            UIAudioManager.Instance?.SwitchLevelButtonClick(); // 🔊 play sound
+            UIAudioManager.Instance?.SwitchLevelButtonClick();
         }
     }
+
     public void StartNextLevel()
-{
-    Debug.Log("StartNextLevel triggered");
-
-    int nextIndex = PlayerPrefs.GetInt("CurrentLevelIndex", 0) + 1;
-
-    if (nextIndex >= levels.Count)
     {
-        Debug.Log("No more levels. Returning to Main Menu or showing end screen.");
-        SceneManager.LoadScene("MainMenu"); // You can change this to "Credits" or a "Game Complete" screen
-        return;
+        int nextIndex = PlayerPrefs.GetInt("CurrentLevelIndex", 0) + 1;
+        if (nextIndex >= levels.Count)
+        {
+            SceneManager.LoadScene("MainMenu");
+            return;
+        }
+        PlayerPrefs.SetInt("CurrentLevelIndex", nextIndex);
+        PlayerPrefs.SetString("SortType", levels[nextIndex].sortTypeKey);
+        PlayerPrefs.Save();
+        SceneManager.LoadScene("InGame");
     }
-
-    PlayerPrefs.SetInt("CurrentLevelIndex", nextIndex);
-    PlayerPrefs.SetString("SortType", levels[nextIndex].sortTypeKey);
-    PlayerPrefs.Save();
-
-    SceneManager.LoadScene("InGame");
-}
-
 }

@@ -7,7 +7,8 @@ public enum SortType
 {
     Bubble,
     Insertion,
-    Selection
+    Selection,
+    Merge
 }
 
 public class BalloonSpawner : MonoBehaviour
@@ -18,13 +19,18 @@ public class BalloonSpawner : MonoBehaviour
 
     [Header("Spawn Settings")]
     public int numberOfBalloons = 10;         
-    public float spacing = 1.5f;              
     public float yPosition = 0f;              
+    [Range(0.5f, 1f)]
+    public float paddingRatio = 0.9f;         // % of screen width to use
+    [Range(0.1f, 2f)]
+    public float scaleMultiplier = .75f;        // tweak to enlarge/shrink balloons
 
     [Header("Sorting Logic")]
     public BubbleSortController bubbleSortController;
     public InsertionSortController insertionSortController;
     public SelectionSortController selectionSortController; 
+    public MergeSortController mergeSortController;
+
     public SortType sortType;
     public GameManager gameManager;
 
@@ -32,15 +38,12 @@ public class BalloonSpawner : MonoBehaviour
 
     void Start()
     {
+        // pick sort type
         string sortTypeStr = PlayerPrefs.GetString("SortType", "Bubble");
-        
-
-        if (sortTypeStr == "Insertion")
-            sortType = SortType.Insertion;
-        else if (sortTypeStr == "Selection")
-            sortType = SortType.Selection;
-        else
-            sortType = SortType.Bubble;
+        if      (sortTypeStr == "Insertion") sortType = SortType.Insertion;
+        else if (sortTypeStr == "Selection") sortType = SortType.Selection;
+        else if (sortTypeStr == "Merge")     sortType = SortType.Merge;
+        else                                  sortType = SortType.Bubble;
 
         SpawnBalloons();
         StartCoroutine(InitializeSortAfterFrame());
@@ -57,32 +60,55 @@ public class BalloonSpawner : MonoBehaviour
 
     private void SpawnBalloons()
     {
-        const int MIN_VALUE = 0;
-        const int MAX_VALUE = 20;
-
+        // clamp to unique range
+        const int MIN_VALUE = 0, MAX_VALUE = 20;
         if (numberOfBalloons > (MAX_VALUE - MIN_VALUE + 1))
         {
-            Debug.LogWarning($"Number of balloons ({numberOfBalloons}) exceeds unique range size; clamping.");
+            Debug.LogWarning($"Clamping numberOfBalloons from {numberOfBalloons} to max {(MAX_VALUE - MIN_VALUE + 1)}");
             numberOfBalloons = MAX_VALUE - MIN_VALUE + 1;
         }
 
-        List<int> pool = new();
+        // build & shuffle pool
+        List<int> pool = new List<int>();
         for (int i = MIN_VALUE; i <= MAX_VALUE; i++) pool.Add(i);
-
         for (int i = 0; i < pool.Count; i++)
         {
             int j = Random.Range(i, pool.Count);
             (pool[i], pool[j]) = (pool[j], pool[i]);
         }
 
-        float offset = (numberOfBalloons - 1) * spacing * 0.5f;
+        // camera dimensions
+        Camera cam = Camera.main;
+        float worldHeight = cam.orthographicSize * 2f;
+        float worldWidth  = worldHeight * cam.aspect;
 
+        // usable width + margin
+        float usableWidth = worldWidth * paddingRatio;
+        float margin      = (worldWidth - usableWidth) * 0.5f;
+
+        // dynamic spacing
+        float spacing = usableWidth / numberOfBalloons;
+
+        // compute startX
+        float startX = cam.transform.position.x - worldWidth/2f + margin + spacing/2f;
+
+        // instantiate & scale each balloon
         for (int i = 0; i < numberOfBalloons; i++)
         {
-            Vector3 pos = new(i * spacing - offset, yPosition, 0f);
+            Vector3 pos = new Vector3(startX + i * spacing, yPosition, 0f);
             Transform parent = balloonsCanvas != null ? balloonsCanvas.transform : transform;
             GameObject balloon = Instantiate(balloonPrefab, pos, Quaternion.identity, parent);
 
+            // SCALE BASED ON SPACING + MULTIPLIER
+            var sr = balloon.GetComponentInChildren<SpriteRenderer>();
+            if (sr != null)
+            {
+                float originalWidth = sr.bounds.size.x;
+                float scaleFactor   = (spacing / originalWidth) * scaleMultiplier;
+                balloon.transform.localScale = Vector3.one * scaleFactor;
+            }
+
+            // set the number text
             TMP_Text tmp = balloon.GetComponentInChildren<TMP_Text>();
             if (tmp != null)
                 tmp.text = pool[i].ToString();
