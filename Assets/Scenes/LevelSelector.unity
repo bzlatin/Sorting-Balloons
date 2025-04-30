@@ -866,6 +866,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b81dc773ea9c50243bb62b222bc254af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  backgroundImage: {fileID: 1250127776}
+  bubbleSprite: {fileID: -6179217043664234106, guid: 5a7e034867695f04280cc5bf74462670, type: 3}
+  insertionSprite: {fileID: 2459180711757234080, guid: a851ba7e9a8042242a0594f44a535f18, type: 3}
+  selectionSprite: {fileID: 1778962826666946234, guid: 9ef0cad36841bc247820bfaca67c486e, type: 3}
+  MergeSprite: {fileID: -2380247601681082050, guid: df5d9a5fde436ec4daf434012f10b710, type: 3}
   startButton: {fileID: 1063814117}
   leftArrow: {fileID: 632263417}
   rightArrow: {fileID: 1990481165}
@@ -3103,6 +3108,17 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1250127776 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4983619130958335808, guid: 499affbb960174ffb8a7ab6eb8e442bd, type: 3}
+  m_PrefabInstance: {fileID: 620497815}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1264496581
 GameObject:
   m_ObjectHideFlags: 0
