@@ -179,7 +179,6 @@ public class MergeSortController : MonoBehaviour
         foreach (var b in balloons)
             b.GetComponent<BalloonHighlight>()?.SetWinner();
 
-        gameManager.UpdateStatus($"All balloons sorted!");
         gameManager.OnLevelComplete();
     }
 
