@@ -42,7 +42,7 @@ Use arrow keys to pick the smaller balloon during the merge process and complete
 
 Watch a short gameplay demo of _Sorting Balloons_ in action:
 
-   1.https://drive.google.com/file/d/1dIcvrbl1OjDksNdjw5Mq9NisZ_yqqKBQ/preview 
+   1. https://drive.google.com/file/d/1dIcvrbl1OjDksNdjw5Mq9NisZ_yqqKBQ/preview 
 
 7. Education Game Design Document
 
