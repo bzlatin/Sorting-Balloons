@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class BubbleSortUIController : MonoBehaviour,ISortUIController
+public class BubbleSortUIController : MonoBehaviour
 {
     [HideInInspector] public List<GameObject> balloons;
 
@@ -167,5 +167,6 @@ public class BubbleSortUIController : MonoBehaviour,ISortUIController
     }
 
     private void OnDisable() => StopSorting();
-    private void OnEnable()  => Initialize();
+    
+
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 
 
-public class MergeSortUIController : MonoBehaviour,ISortUIController
+public class MergeSortUIController : MonoBehaviour
 {
     [HideInInspector] public List<GameObject> balloons;
 
@@ -217,5 +217,4 @@ public class MergeSortUIController : MonoBehaviour,ISortUIController
     }
 
     private void OnDisable() => StopSorting();
-    private void OnEnable()  => Initialize();
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 
 
-public class SelectionSortUIController : MonoBehaviour,ISortUIController
+public class SelectionSortUIController : MonoBehaviour
 {
     [HideInInspector] public List<GameObject> balloons;
 
@@ -186,5 +186,4 @@ public class SelectionSortUIController : MonoBehaviour,ISortUIController
     }
 
     private void OnDisable() => StopSorting();
-     private void OnEnable()  => Initialize();
 }

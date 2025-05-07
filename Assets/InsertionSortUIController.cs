@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 
 
-public class InsertionSortUIController : MonoBehaviour,ISortUIController
+public class InsertionSortUIController : MonoBehaviour
 {
     [HideInInspector] public List<GameObject> balloons;   // set by spawner
 
@@ -174,5 +174,4 @@ public class InsertionSortUIController : MonoBehaviour,ISortUIController
     }
 
     private void OnDisable() => StopSorting();
-     private void OnEnable()  => Initialize();
 }
