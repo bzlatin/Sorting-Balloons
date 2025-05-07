@@ -32,7 +32,13 @@ Compare adjacent balloons and swap them in the correct order to progress through
 Use arrow keys to pick the smaller balloon during the merge process and complete the sort.
 
 5. Gameplay Video
-   1. (Coming Soon)
+   1. ## 🎬 Gameplay Trailer
+
+Watch a short gameplay demo of _Sorting Balloons_ in action:
+
+<iframe src="https://drive.google.com/file/d/1dIcvrbl1OjDksNdjw5Mq9NisZ_yqqKBQ/preview" 
+        width="640" height="480" allow="autoplay"></iframe>
+
 6. Education Game Design Document
    1. https://docs.google.com/document/d/1O8EQdS_Fc7XfgZvpDotb9tJoFIuBJpD18HIOmcBMi3Y/edit?usp=sharing
 7. Credits and Acknowledgements
