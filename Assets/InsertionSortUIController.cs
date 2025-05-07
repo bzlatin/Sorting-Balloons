@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 
 
-public class InsertionSortUIController : MonoBehaviour
+public class InsertionSortUIController : MonoBehaviour,ISortUIController
 {
     [HideInInspector] public List<GameObject> balloons;   // set by spawner
 
@@ -163,4 +163,16 @@ public class InsertionSortUIController : MonoBehaviour
         foreach (var go in balloons)
             go.GetComponentInChildren<BalloonHighlightUI>()?.SetHighlighted();
     }
+    public void StopSorting()
+    {
+        if (autoRoutine != null)
+        {
+            StopCoroutine(autoRoutine);
+            autoRoutine = null;
+        }
+        StopAllCoroutines();          // belt-and-suspenders
+    }
+
+    private void OnDisable() => StopSorting();
+     private void OnEnable()  => Initialize();
 }

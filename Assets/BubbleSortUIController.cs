@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class BubbleSortUIController : MonoBehaviour
+public class BubbleSortUIController : MonoBehaviour,ISortUIController
 {
     [HideInInspector] public List<GameObject> balloons;
 
@@ -53,7 +53,7 @@ public class BubbleSortUIController : MonoBehaviour
         }
 
         ClearAllHighlights();
-        SetAllFinal(); // ✅ Mark all as sorted
+        SetAllFinal(); // Mark all as sorted
 
         yield return new WaitForSeconds(restartDelay);
 
@@ -146,12 +146,26 @@ public class BubbleSortUIController : MonoBehaviour
             go.GetComponentInChildren<BalloonHighlightUI>()?.SetNormal();
     }
 
+    
     private void SetAllFinal()
     {
         foreach (var go in balloons)
         {
             var h = go.GetComponentInChildren<BalloonHighlightUI>();
-            h?.SetHighlighted(); // ✅ Reuse highlight (green) for sorted state
+            h?.SetHighlighted(); 
         }
     }
+    
+    public void StopSorting()
+    {
+        if (autoRoutine != null)
+        {
+            StopCoroutine(autoRoutine);
+            autoRoutine = null;
+        }
+        StopAllCoroutines();         
+    }
+
+    private void OnDisable() => StopSorting();
+    private void OnEnable()  => Initialize();
 }

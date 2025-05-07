@@ -3,12 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-/// <summary>
-/// Bottom-up (iterative) merge-sort animation for UI “balloon” objects.
-/// Uses simple pair-swaps to shift elements, so it re-uses the same
-///   SwapVisuals() coroutine you already have.
-/// </summary>
-public class MergeSortUIController : MonoBehaviour
+
+public class MergeSortUIController : MonoBehaviour,ISortUIController
 {
     [HideInInspector] public List<GameObject> balloons;
 
@@ -19,15 +15,15 @@ public class MergeSortUIController : MonoBehaviour
     public float stepInterval = 1.5f;   // pause between algorithm steps
     public float restartDelay = 1.0f;   // wait before respawn
 
-    /* ────────────────── algorithm state ────────────────── */
+    
     private int  runSize;        // current merge‐run width (1,2,4,8 …)
     private int  leftStart;      // first index of the segment we’re merging
     private int  mid;            // segment midpoint       (leftStart+runSize−1)
-    private int  rightEnd;       // last index of segment  (leftStart+2*runSize−1)
-    private int  iPtr;           // pointer in left half
+    private int  rightEnd;       
+    private int  iPtr;          
     private int  jPtr;           // pointer in right half
 
-    private bool isMerging;      // true while inside a merge segment
+    private bool isMerging;      
     private bool isShifting;     // true while ShiftRight coroutine runs
 
     private Coroutine autoRoutine;
@@ -210,4 +206,16 @@ public class MergeSortUIController : MonoBehaviour
         foreach (var go in balloons)
             go.GetComponentInChildren<BalloonHighlightUI>()?.SetHighlighted();
     }
+    public void StopSorting()
+    {
+        if (autoRoutine != null)
+        {
+            StopCoroutine(autoRoutine);
+            autoRoutine = null;
+        }
+        StopAllCoroutines();         
+    }
+
+    private void OnDisable() => StopSorting();
+    private void OnEnable()  => Initialize();
 }

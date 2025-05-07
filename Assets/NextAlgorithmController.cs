@@ -7,6 +7,7 @@ public class NextAlgorithmController : MonoBehaviour
 
     public void LoadNextAlgorithm()
     {
+        StopCurrentSortIfAny();
         int currentIndex = PlayerPrefs.GetInt("CurrentLevelIndex", 0);
         int nextIndex = currentIndex + 1;
 
@@ -25,6 +26,16 @@ public class NextAlgorithmController : MonoBehaviour
         {
             Debug.Log("All levels completed. Returning to main menu.");
             SceneManager.LoadScene("MainMenu");
+        }
+    }
+      private static void StopCurrentSortIfAny()
+    {
+        foreach (var ctrl in Object.FindObjectsByType<MonoBehaviour>(
+                     FindObjectsInactive.Include,
+                     FindObjectsSortMode.None))
+        {
+            if (ctrl is ISortUIController sorter)
+                sorter.StopSorting();
         }
     }
 }

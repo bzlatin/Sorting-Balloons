@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 
 
-public class SelectionSortUIController : MonoBehaviour
+public class SelectionSortUIController : MonoBehaviour,ISortUIController
 {
     [HideInInspector] public List<GameObject> balloons;
 
@@ -175,4 +175,16 @@ public class SelectionSortUIController : MonoBehaviour
             go.GetComponentInChildren<BalloonHighlightUI>()?.SetHighlighted();
     }
     #endregion
+    public void StopSorting()
+    {
+        if (autoRoutine != null)
+        {
+            StopCoroutine(autoRoutine);
+            autoRoutine = null;
+        }
+        StopAllCoroutines();          
+    }
+
+    private void OnDisable() => StopSorting();
+     private void OnEnable()  => Initialize();
 }
