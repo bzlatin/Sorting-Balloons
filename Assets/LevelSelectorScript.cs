@@ -121,6 +121,7 @@
         {
             PlayerPrefs.SetInt("CurrentLevelIndex", currentIndex);
             PlayerPrefs.SetString("SortType", levels[currentIndex].sortTypeKey);
+            PlayerPrefs.SetString("Algo", levels[currentIndex].sortTypeKey + "Sort");
             PlayerPrefs.Save();
             SceneManager.LoadScene("InGame");
         }

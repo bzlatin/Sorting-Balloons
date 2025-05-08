@@ -11,10 +11,10 @@ public class BubbleSortUIController : MonoBehaviour
     public BalloonSpawnerUI_Bubble spawner;
 
     [Header("Animation")]
-    public float stepInterval = 0.6f;
+    public float stepInterval = 1.5f;
 
     [Header("Cycle")]
-    public float restartDelay = 1.0f;
+    public float restartDelay = 2.0f;
 
     private int index;
     private int end;
@@ -53,7 +53,7 @@ public class BubbleSortUIController : MonoBehaviour
         }
 
         ClearAllHighlights();
-        SetAllFinal(); // ✅ Mark all as sorted
+        SetAllFinal(); // Mark all as sorted
 
         yield return new WaitForSeconds(restartDelay);
 
@@ -146,12 +146,27 @@ public class BubbleSortUIController : MonoBehaviour
             go.GetComponentInChildren<BalloonHighlightUI>()?.SetNormal();
     }
 
+    
     private void SetAllFinal()
     {
         foreach (var go in balloons)
         {
             var h = go.GetComponentInChildren<BalloonHighlightUI>();
-            h?.SetHighlighted(); // ✅ Reuse highlight (green) for sorted state
+            h?.SetHighlighted(); 
         }
     }
+    
+    public void StopSorting()
+    {
+        if (autoRoutine != null)
+        {
+            StopCoroutine(autoRoutine);
+            autoRoutine = null;
+        }
+        StopAllCoroutines();         
+    }
+
+    private void OnDisable() => StopSorting();
+    
+
 }

@@ -175,4 +175,15 @@ public class SelectionSortUIController : MonoBehaviour
             go.GetComponentInChildren<BalloonHighlightUI>()?.SetHighlighted();
     }
     #endregion
+    public void StopSorting()
+    {
+        if (autoRoutine != null)
+        {
+            StopCoroutine(autoRoutine);
+            autoRoutine = null;
+        }
+        StopAllCoroutines();          
+    }
+
+    private void OnDisable() => StopSorting();
 }

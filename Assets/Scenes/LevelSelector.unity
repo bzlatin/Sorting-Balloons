@@ -2764,8 +2764,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   balloons: []
   spawner: {fileID: 167176798}
-  stepInterval: 0.6
-  restartDelay: 1
+  stepInterval: 1.5
+  restartDelay: 2
 --- !u!4 &667045594
 Transform:
   m_ObjectHideFlags: 0
@@ -4499,7 +4499,7 @@ MonoBehaviour:
   balloons: []
   spawner: {fileID: 364901505}
   stepInterval: 1.5
-  restartDelay: 1
+  restartDelay: 2
 --- !u!4 &1690009073
 Transform:
   m_ObjectHideFlags: 0
