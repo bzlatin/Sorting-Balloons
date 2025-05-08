@@ -67,7 +67,7 @@ public class LifeSystem : MonoBehaviour
     void GameOver()
     {
         if (statusText != null)
-            statusText.text = "Game Over!";
+            statusText.text = "";
 
         if (gameOverPanel != null)
             gameOverPanel.SetActive(true);

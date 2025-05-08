@@ -115,7 +115,6 @@ public class GameManager : MonoBehaviour
 
     public void OnLevelComplete()
     {
-        UpdateStatus("Sorted!");
         ShowWinScreen();
         PlayWinGameSound();
         Time.timeScale = 0f;
