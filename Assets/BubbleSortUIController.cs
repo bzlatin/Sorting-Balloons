@@ -11,10 +11,10 @@ public class BubbleSortUIController : MonoBehaviour
     public BalloonSpawnerUI_Bubble spawner;
 
     [Header("Animation")]
-    public float stepInterval = 0.6f;
+    public float stepInterval = 1.5f;
 
     [Header("Cycle")]
-    public float restartDelay = 1.0f;
+    public float restartDelay = 2.0f;
 
     private int index;
     private int end;

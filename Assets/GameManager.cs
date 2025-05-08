@@ -3,9 +3,12 @@ using TMPro;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
+
 public class GameManager : MonoBehaviour
 {
     [Header("UI Panels")]
+    public TextMeshProUGUI algorithmTitleText;
+
     public GameObject winPanel;
     public GameObject gameOverPanel;
     public GameObject pausePanel;
@@ -29,8 +32,18 @@ public class GameManager : MonoBehaviour
     private SortType activeSortType;
     private bool isPaused = false;
 
+
+
+
+
     void Start()
     {
+        string type = PlayerPrefs.GetString("SortType", "Bubble");
+        if (algorithmTitleText != null)
+        {
+            string formatted = char.ToUpper(type[0]) + type.Substring(1).ToLower();
+            algorithmTitleText.text = formatted + " Sort";
+        }
         Time.timeScale = 1f;
         isPaused = false;
         if (pausePanel != null) pausePanel.SetActive(false);
@@ -46,11 +59,13 @@ public class GameManager : MonoBehaviour
         };
 
         // 2) Pick the active sort
-        string type = PlayerPrefs.GetString("SortType", "Bubble");
-        if      (type == "Insertion") activeSortType = SortType.Insertion;
-        else if (type == "Selection") activeSortType = SortType.Selection;
-        else if (type == "Merge")     activeSortType = SortType.Merge;
-        else                           activeSortType = SortType.Bubble;
+        if (type == "Insertion")
+            activeSortType = SortType.Insertion;
+        else if (type == "Selection")
+            activeSortType = SortType.Selection;
+        else
+            activeSortType = SortType.Bubble;
+
 
         // 3) Enable only that controller
         foreach (var kvp in sortControllers)
@@ -59,17 +74,7 @@ public class GameManager : MonoBehaviour
                 kvp.Value.gameObject.SetActive(kvp.Key == activeSortType);
         }
 
-        // 4) Update the instructions panel
-        if (activeSortType == SortType.Merge && instructionsText != null)
-        {
-            // manual line-breaks to guarantee fit
-            instructionsText.text =
-                "Press the ARROW KEY corresponding to the side\n" +
-                "that the smaller highlighted element is on\n" +
-                "or the non-exhausted side.";
-        }
-
-        // 5) Wait for spawner to call InitializeActiveSort()
+        // BalloonSpawner will call InitializeActiveSort after spawning
     }
 
     public void UpdateStatus(string message)
