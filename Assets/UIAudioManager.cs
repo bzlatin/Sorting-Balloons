@@ -205,28 +205,35 @@ private Coroutine menuFadeCoroutine;
 
 
     public void PlayMenuMusic()
+{
+    if (menuFadeCoroutine != null)
     {
-        if (menuFadeCoroutine != null)
-        {
-            StopCoroutine(menuFadeCoroutine);
-            menuFadeCoroutine = null;
-        }
-
-        if (menuMusicSource == null || menuLoopClip == null)
-        {
-            Debug.LogWarning("UIAudioManager: menuMusicSource or menuLoopClip is NULL");
-            return;
-        }
-
-        // FORCE stop to reset state
-        menuMusicSource.Stop();
-        menuMusicSource.clip = menuLoopClip;
-        menuMusicSource.loop = true;
-        menuMusicSource.volume = menuMusicVolume;
-        menuMusicSource.Play();
-
-        Debug.Log("UIAudioManager: Restarting Menu Music cleanly.");
+        StopCoroutine(menuFadeCoroutine);
+        menuFadeCoroutine = null;
     }
+
+    if (menuMusicSource == null || menuLoopClip == null)
+    {
+        Debug.LogWarning("UIAudioManager: menuMusicSource or menuLoopClip is NULL");
+        return;
+    }
+
+    // ✅ Check if menu music is playing the correct clip and volume is OK
+    if (menuMusicSource.isPlaying && menuMusicSource.clip == menuLoopClip && menuMusicSource.volume >= menuMusicVolume * 0.9f)
+    {
+        Debug.Log("UIAudioManager: Menu Music is already playing, skipping restart.");
+        return; // Already playing properly, no need to restart
+    }
+
+    // ✅ Otherwise, reset and play
+    Debug.Log("UIAudioManager: Starting Menu Music or recovering from fade.");
+    menuMusicSource.Stop();
+    menuMusicSource.clip = menuLoopClip;
+    menuMusicSource.loop = true;
+    menuMusicSource.volume = menuMusicVolume;
+    menuMusicSource.Play();
+}
+
 
     public void StopMenuMusic()
     {
