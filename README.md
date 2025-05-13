@@ -39,7 +39,7 @@ Use arrow keys to pick the smaller balloon during the merge process and complete
 
 6. 🎬 Gameplay Video
 
-   1. https://drive.google.com/file/d/1dIcvrbl1OjDksNdjw5Mq9NisZ_yqqKBQ/preview
+   1. https://drive.google.com/file/d/1FKrcZOH9yhztx-WGI52t-sx2RZ5RecjX/view?usp=sharing
 
 7. Education Game Design Document
 
@@ -49,6 +49,7 @@ Use arrow keys to pick the smaller balloon during the merge process and complete
 
    1. ChatGPT (used for images & certain code aspects)
    2. Bloons Tower Defense (used as inspiration for aesthetic purposes)
+   3. Background music made by Ben Zlatin
 
 9. Link to game
    1. https://bzlatin.github.io/Sorting-Balloons/
