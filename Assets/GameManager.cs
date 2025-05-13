@@ -38,6 +38,10 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        UIAudioManager.Instance.StopMenuMusic();    
+        UIAudioManager.Instance.PlayBackgroundMusic();
+   
+
         string type = PlayerPrefs.GetString("SortType", "Bubble");
         if (algorithmTitleText != null)
         {
@@ -74,7 +78,7 @@ public class GameManager : MonoBehaviour
                 kvp.Value.gameObject.SetActive(kvp.Key == activeSortType);
         }
 
-        // BalloonSpawner will call InitializeActiveSort after spawning
+
     }
 
     public void UpdateStatus(string message)
@@ -98,6 +102,7 @@ public class GameManager : MonoBehaviour
         isPaused = true;
         Time.timeScale = 0f;
         if (pausePanel != null) pausePanel.SetActive(true);
+        UIAudioManager.Instance.PauseBackgroundMusic();
     }
 
     void ResumeGame()
@@ -105,7 +110,9 @@ public class GameManager : MonoBehaviour
         isPaused = false;
         Time.timeScale = 1f;
         if (pausePanel != null) pausePanel.SetActive(false);
+        UIAudioManager.Instance.ResumeBackgroundMusic();
     }
+
 
     public void OnPlayerMistake(string message)
     {
@@ -118,7 +125,9 @@ public class GameManager : MonoBehaviour
         ShowWinScreen();
         PlayWinGameSound();
         Time.timeScale = 0f;
+        UIAudioManager.Instance.StopBackgroundMusic();
     }
+
 
     public void ShowWinScreen()
     {
@@ -154,6 +163,8 @@ public class GameManager : MonoBehaviour
         timer?.ResetTimer();
         lifeSystem?.ResetLives();
         balloonSpawner?.ResetSpawner();
+        UIAudioManager.Instance.PlayBackgroundMusic();
+
     }
 
     public void InitializeActiveSort(List<GameObject> balloons)

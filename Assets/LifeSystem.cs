@@ -64,7 +64,7 @@ public class LifeSystem : MonoBehaviour
         }
     }
 
-    void GameOver()
+    public void GameOver()
     {
         if (statusText != null)
             statusText.text = "";
@@ -72,14 +72,22 @@ public class LifeSystem : MonoBehaviour
         if (gameOverPanel != null)
             gameOverPanel.SetActive(true);
 
-        PlayLoseGameSound();
+        UIAudioManager.Instance?.PlayLoseSound();
 
         bubbleSortController?.DisableInput();
         insertionSortController?.DisableInput();
-        selectionSortController?.DisableInput(); // Added
+        selectionSortController?.DisableInput();
+
+        // ✅ Fade out in-game background music
+        UIAudioManager.Instance?.FadeOutBackgroundMusic(2f);
+
+        // ✅ Make sure menu music is fully stopped (if it was ever started)
+        UIAudioManager.Instance?.StopMenuMusic();
 
         Time.timeScale = 0f;
     }
+
+
 
     public void LoadMainMenu()
     {
@@ -88,6 +96,6 @@ public class LifeSystem : MonoBehaviour
 
     public void PlayLoseGameSound()
     {
-        UIAudioManager.Instance?.PlayLoseWinSound();
+        UIAudioManager.Instance?.PlayLoseSound();
     }
 }

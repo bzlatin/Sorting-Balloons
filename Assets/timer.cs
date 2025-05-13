@@ -7,6 +7,8 @@ public class Timer : MonoBehaviour
     public float timeRemaining = 180f; // Set the initial time to 3 minutes (180 seconds)
     public TextMeshProUGUI timerText;  // Reference to the TextMeshProUGUI component to display the timer
     public GameObject gameOverPanel;   // Reference to the Game Over panel (UI)
+    private bool isGameOver = false;
+
 
     void Start()
     {
@@ -48,24 +50,25 @@ public class Timer : MonoBehaviour
     }
 
     // Show the Game Over panel and change the timer text
-    void TriggerGameOver()
+void TriggerGameOver()
+{
+    if (isGameOver) return;  // ✅ Prevent multiple triggers
+    isGameOver = true;
+
+    if (timerText != null)
     {
-        // Display "Time's Up!" in the Timer Text
-        if (timerText != null)
-        {
-            timerText.text = "Time's Up!";
-        }
-
-        // Make sure the Game Over panel is active when the time is up
-        if (gameOverPanel != null)
-        {
-            gameOverPanel.SetActive(true); // Show the Game Over panel
-        }
-
-        // Optionally, stop any further gameplay actions here (e.g., pause the game)
-        Time.timeScale = 0f; // This stops the game time (pauses the game)
-        Debug.Log("Game Over!");
+        timerText.text = "Time's Up!";
     }
+
+    if (LifeSystem.Instance != null)
+    {
+        LifeSystem.Instance.GameOver();
+    }
+
+    Debug.Log("Game Over!");
+}
+
+
 
     public void ResetTimer()
     {
