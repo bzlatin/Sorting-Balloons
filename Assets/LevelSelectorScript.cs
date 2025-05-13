@@ -31,6 +31,8 @@
         void Start()
         {
             SetupButtons();
+            UIAudioManager.Instance.PlayMenuMusic();
+
 
             // Remember whatever you typed into the Inspector
             if (instructionsText != null)

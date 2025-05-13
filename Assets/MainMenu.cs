@@ -14,11 +14,17 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private BallonSpawnerUI_Merge spawner3;
 
 
+
+
     private void Awake()
     {
         PlayerPrefs.SetInt("Difficulty", 0);  // Reset to Easy every time main menu is opened
     }
 
+    private void Start()
+    {
+        UIAudioManager.Instance.PlayMenuMusic();
+    }
     public void PlayGame()
     {
         // 1️⃣  If the LevelSelector scene isn’t loaded yet → load it.
