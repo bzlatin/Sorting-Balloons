@@ -53,4 +53,4 @@ Use arrow keys to pick the smaller balloon during the merge process and complete
 
 9. Links
    1. https://bzlatin.github.io/Sorting-Balloons/
-   2. [https://www.canva.com/design/DAGoBVPTWFc/l6tkXb1o8faRW9wHe-3Yrg/edit?utm_content=DAGoBVPTWFc&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton](https://www.canva.com/design/DAGoF623MkM/Qu1E7t548UincPnfS6LElQ/view?utm_content=DAGoF623MkM&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hcd783551b6#6)
+   2. https://www.canva.com/design/DAGoF623MkM/Qu1E7t548UincPnfS6LElQ/view?utm_content=DAGoF623MkM&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hcd783551b6#1
