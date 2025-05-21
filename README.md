@@ -43,7 +43,7 @@ Use arrow keys to pick the smaller balloon during the merge process and complete
 
 7. Education Game Design Document
 
-   1. https://docs.google.com/document/d/1O8EQdS_Fc7XfgZvpDotb9tJoFIuBJpD18HIOmcBMi3Y/edit?usp=sharing
+   1. [View the Game Design Document (EGDD)](docs/egdd.md)
 
 8. Credits and Acknowledgements
 
