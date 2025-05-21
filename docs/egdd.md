@@ -1,10 +1,9 @@
 # Game Name
-Sorting Balloons
-http://www.gameacademy.com/perfecting-indie-games-elevator-pitch/
+Balloon Sort
 
 
 ## Elevator Pitch
-Sorting Balloons is a fun, interactive game that teaches players how sorting algorithms work—without feeling like a lesson. Instead of reading textbook definitions, players sort colorful balloons using real techniques like Bubble Sort, Merge Sort, and QuickSort. Through quick challenges and playful mechanics, they experience each algorithm’s strengths and quirks firsthand. The game blends strategy and speed, helping players develop a natural understanding of computer science concepts in a way that’s intuitive and engaging. Whether you're a student or just curious about how computers think, Sorting Balloons makes learning algorithms actually enjoyable.
+Balloon Sort is a fun, interactive game that teaches players how sorting algorithms work—without feeling like a lesson. Instead of reading textbook definitions, players sort colorful balloons using real techniques like Bubble Sort, Merge Sort, and QuickSort. Through quick challenges and playful mechanics, they experience each algorithm’s strengths and quirks firsthand. The game blends strategy and speed, helping players develop a natural understanding of computer science concepts in a way that’s intuitive and engaging. Whether you're a student or just curious about how computers think, Balloon Sort makes learning algorithms actually enjoyable.
 
 
 ## Influences (Brief)
@@ -78,7 +77,7 @@ What is the time complexity of quicksort on a given list?
 
 # What sets this project apart?
 
-- Interactive Sorting: Unlike traditional static exercises, Sorting Balloons immerses players in active problem-solving.
+- Interactive Sorting: Unlike traditional static exercises, Balloon Sort immerses players in active problem-solving.
 - Fun & Strategy: The game transforms sorting into an engaging and competitive experience.
 - Gamification: Power-ups, leaderboards, and character interactions enhance learning motivation.
 
