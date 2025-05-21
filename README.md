@@ -51,5 +51,6 @@ Use arrow keys to pick the smaller balloon during the merge process and complete
    2. Bloons Tower Defense (used as inspiration for aesthetic purposes)
    3. Background music made by Ben Zlatin
 
-9. Link to game
+9. Links
    1. https://bzlatin.github.io/Sorting-Balloons/
+   2. https://www.canva.com/design/DAGoBVPTWFc/l6tkXb1o8faRW9wHe-3Yrg/edit?utm_content=DAGoBVPTWFc&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
